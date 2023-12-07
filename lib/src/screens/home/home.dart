@@ -5,12 +5,310 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //ボタンスタイル
+    final ButtonStyle style = ElevatedButton.styleFrom(
+      backgroundColor: Colors.green,
+    ).merge(
+      ButtonStyle(
+        textStyle: MaterialStateProperty.all<TextStyle>(
+          const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+        ),
+      ),
+    );
+    //地図画像の下の件数　TODOデータベースから引っ張る
+    var currysearchcount = 10000;
+    //カリータイプから探すリスト
+    List<String> currytypeimage = [
+      'assets/images/indeiacurry.png',
+      'assets/images/minamicurry.png',
+      'assets/images/spicecurry.png',
+      'assets/images/japancurry.png',
+      'assets/images/hotelcurry.png',
+      'assets/images/soupcurry.png',
+      'assets/images/srilankacurry.png',
+      'assets/images/taicurry.png',
+    ];
+    //カリータイプの下のテキスト
+    List<String> curryTypeText = [
+      '南インドカリー',
+      'インドカリー',
+      'スパイスカリー',
+      'ジャパンカリー',
+      'ホテルカリー',
+      'スープカリー',
+      'スリランカカリー',
+      'タイカリー',
+    ];
+
+    //最近オープンしたカリーショップ(仮) TODOデータベースから引っ張るようにする
+    List<String> opencurryshop = [
+      'assets/images/sample.png',
+      'assets/images/sample.png',
+      'assets/images/sample.png',
+      'assets/images/sample.png',
+      'assets/images/sample.png',
+      'assets/images/sample.png',
+    ];
+    //最近オープンしたカリーショップ店舗名　TODOデータベースから引っ張るようにする
+    List<String> opencurryshoptext = [
+      'Vashon/curry&grillfaaaaaaaaaaaaaaaaa',
+      'Vashon/curry&grill',
+      'Vashon/curry&grill',
+      'Vashon/curry&grill',
+      'Vashon/curry&grill',
+      'Vashon/curry&grill',
+    ];
+
+    //最近オープンしたカリーショップのカリージャンル　TODOデータベースから引っ張るようにする
+    List<String> opencurryshopgenre = [
+      'その他カリー',
+      'その他カリー',
+      'その他カリー',
+      'その他カリー',
+      'その他カリー',
+      'その他カリー',
+    ];
+
+    //最近オープンしたカリーショップの所在地　TODOデータベースから引っ張るようにする
+    List<String> opencurryshoplocation = [
+      '東京都港区',
+      '東京都港区',
+      '東京都港区',
+      '東京都港区',
+      '東京都港区',
+      '東京都港区',
+    ];
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ホーム'),
+        title: Text('ホーム'),
       ),
-      body:
-          const Center(child: Text('ホーム画面', style: TextStyle(fontSize: 32.0))),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(24.0),
+              child:
+                  Image(image: AssetImage('assets/images/india19-37359.jpg')),
+            ),
+            Padding(
+              padding: EdgeInsets.all(24.0),
+              child: SearchBar(
+                hintText: '行きたいカリ〜を検索',
+                leading: Icon(Icons.search),
+              ),
+            ),
+            Stack(
+              alignment: AlignmentDirectional.center,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(24.0),
+                  child: Container(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.asset(
+                        'assets/images/searchbackground.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: style,
+                    child: const Text('地図からカリ〜を探す'),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text('近くに$currysearchcount件のカリーショップがあるでしょう〜'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 0,
+            ),
+            Padding(
+              padding: EdgeInsets.all(0.0),
+              child: Image.asset(
+                'assets/images/kumaluacon.png',
+                width: 100,
+                height: 100,
+              ),
+            ),
+            // カリータイプから探す
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Container(
+                alignment: AlignmentDirectional.topStart,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'カリータイプから探す',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: List.generate(currytypeimage.length, (index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 90,
+                                  height: 90,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(currytypeimage[index]),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  curryTypeText[index],
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // 最近オープンしたカリーショップ
+            SizedBox(height: 16),
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Container(
+                alignment: AlignmentDirectional.topStart,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '最近オープンしたカリーショップ',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: List.generate(opencurryshop.length, (index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 150,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    image: DecorationImage(
+                                      image: AssetImage(opencurryshop[index]),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                // 店舗名
+                                SizedBox(height: 8),
+                                Container(
+                                  width: 150, // 固定したい横幅を指定
+                                  child: Text(
+                                    opencurryshoptext[index],
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow
+                                        .ellipsis, // テキストがはみ出た場合に省略記号で表示する
+                                    maxLines: 1, // 最大行数を指定
+                                  ),
+                                ),
+                                // カリージャンル
+                                SizedBox(height: 8),
+                                Container(
+                                  width: 150, // 固定したい横幅を指定
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        opencurryshopgenre[index],
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        overflow: TextOverflow
+                                            .ellipsis, // テキストがはみ出た場合に省略記号で表示する
+                                        maxLines: 1, // 最大行数を指定
+                                      ),
+                                      // 文字の間のハイフン
+                                      SizedBox(height: 8),
+                                      Text(
+                                        '-',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      // 店舗所在
+                                      SizedBox(height: 8),
+                                      Text(
+                                        opencurryshoplocation[index],
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        overflow: TextOverflow
+                                            .ellipsis, // テキストがはみ出た場合に省略記号で表示する
+                                        maxLines: 1, // 最大行数を指定
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
