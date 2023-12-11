@@ -25,7 +25,11 @@ dev_dependencies:
 
   flutter_lints: ^2.0.0
 
-
+  lottie: ^1.2.1
+  firebase_core: ^1.0.1
+  firebase_auth: ^1.0.1
+  google_sign_in: ^5.0.0
+ 
 flutter:
   uses-material-design: true
   assets:
@@ -41,6 +45,7 @@ flutter:
     - assets/images/srilankacurry.png
     - assets/images/taicurry.png
     - assets/images/sample.png
+    - assets/images/android_neutral_rd_na@1x.png
 
 
 

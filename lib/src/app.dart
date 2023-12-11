@@ -3,7 +3,6 @@ import 'screens/home/home.dart';
 import 'screens/post/post.dart';
 import 'screens/profile/profile.dart';
 import 'screens/timeline/timeline.dart';
-import 'screens/notification/notification.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -31,7 +30,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   static const _screens = [
     HomeScreen(),
     TimelineScreen(),
-    NotificationScreen(),
     PostScreen(),
     ProfileScreen()
   ];
@@ -56,8 +54,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'ホーム'),
             BottomNavigationBarItem(icon: Icon(Icons.list), label: 'タイムライン'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.notifications), label: '通知'),
             BottomNavigationBarItem(icon: Icon(Icons.feed), label: '投稿'),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'プロフィール'),
           ],
