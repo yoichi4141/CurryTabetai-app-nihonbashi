@@ -84,17 +84,17 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('ホーム'),
+        title: const Text('ホーム'),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
+            const Padding(
               padding: EdgeInsets.all(24.0),
               child:
                   Image(image: AssetImage('assets/images/india19-37359.jpg')),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.all(24.0),
               child: SearchBar(
                 hintText: '行きたいカリ〜を検索',
@@ -105,7 +105,7 @@ class HomeScreen extends StatelessWidget {
               alignment: AlignmentDirectional.center,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.all(24.0),
                   child: Container(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
@@ -134,11 +134,11 @@ class HomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 0,
             ),
             Padding(
-              padding: EdgeInsets.all(0.0),
+              padding: const EdgeInsets.all(0.0),
               child: Image.asset(
                 'assets/images/kumaluacon.png',
                 width: 100,
@@ -147,13 +147,13 @@ class HomeScreen extends StatelessWidget {
             ),
             // カリータイプから探す
             Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Container(
                 alignment: AlignmentDirectional.topStart,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'カリータイプから探す',
                       style: TextStyle(
                         fontSize: 22,
@@ -161,7 +161,7 @@ class HomeScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -180,10 +180,10 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Text(
                                   curryTypeText[index],
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
@@ -201,15 +201,15 @@ class HomeScreen extends StatelessWidget {
             ),
 
             // 最近オープンしたカリーショップ
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Container(
                 alignment: AlignmentDirectional.topStart,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       '最近オープンしたカリーショップ',
                       style: TextStyle(
                         fontSize: 22,
@@ -217,7 +217,7 @@ class HomeScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -238,12 +238,12 @@ class HomeScreen extends StatelessWidget {
                                   ),
                                 ),
                                 // 店舗名
-                                SizedBox(height: 8),
-                                Container(
+                                const SizedBox(height: 8),
+                                SizedBox(
                                   width: 150, // 固定したい横幅を指定
                                   child: Text(
                                     opencurryshoptext[index],
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 12,
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
@@ -254,14 +254,14 @@ class HomeScreen extends StatelessWidget {
                                   ),
                                 ),
                                 // カリージャンル
-                                SizedBox(height: 8),
-                                Container(
+                                const SizedBox(height: 8),
+                                SizedBox(
                                   width: 150, // 固定したい横幅を指定
                                   child: Row(
                                     children: [
                                       Text(
                                         opencurryshopgenre[index],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 12,
                                           color: Colors.grey,
                                           fontWeight: FontWeight.bold,
@@ -271,8 +271,8 @@ class HomeScreen extends StatelessWidget {
                                         maxLines: 1, // 最大行数を指定
                                       ),
                                       // 文字の間のハイフン
-                                      SizedBox(height: 8),
-                                      Text(
+                                      const SizedBox(height: 8),
+                                      const Text(
                                         '-',
                                         style: TextStyle(
                                           fontSize: 12,
@@ -281,10 +281,10 @@ class HomeScreen extends StatelessWidget {
                                         ),
                                       ),
                                       // 店舗所在
-                                      SizedBox(height: 8),
+                                      const SizedBox(height: 8),
                                       Text(
                                         opencurryshoplocation[index],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 12,
                                           color: Colors.grey,
                                           fontWeight: FontWeight.bold,

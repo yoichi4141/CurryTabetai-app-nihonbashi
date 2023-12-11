@@ -16,14 +16,14 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(title: const Text(''), actions: [
           IconButton(
-            icon: Icon(Icons.menu),
+            icon: const Icon(Icons.menu),
             onPressed: () {
               _showSettingModal(context);
             },
           ),
         ]),
         // ログイン済みだったらsignedProfileView、してなかったらguestView
-        body: isLogin ? guestView() : signedProfileView());
+        body: isLogin ? guestView() : const signedProfileView());
   }
 
 // 設定画面モーダルを出す関数
@@ -31,7 +31,7 @@ class ProfileScreen extends StatelessWidget {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
-        return Container(
+        return SizedBox(
           height: 200,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),

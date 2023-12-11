@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget guestView() {
+Widget guestpostview() {
   return Container(
     child: Center(
       child: Column(
