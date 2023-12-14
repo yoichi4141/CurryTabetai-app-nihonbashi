@@ -16,6 +16,8 @@ dependencies:
 
 
   cupertino_icons: ^1.0.2
+  intl: ^0.17.0
+  image_picker: ^1.0.4
  
 
 dev_dependencies:
@@ -46,6 +48,7 @@ flutter:
     - assets/images/taicurry.png
     - assets/images/sample.png
     - assets/images/android_neutral_rd_na@1x.png
+    - assets/images/1702.png
 
 
 
