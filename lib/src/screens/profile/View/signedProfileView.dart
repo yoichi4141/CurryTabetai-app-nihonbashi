@@ -27,13 +27,13 @@ class signedProfileView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   profileViewModel.name,
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                 ),
               ),
 
               // タイトル: 自己紹介
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -51,14 +51,14 @@ class signedProfileView extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     profileViewModel.introduction,
-                    style: TextStyle(fontSize: 16.0),
+                    style: const TextStyle(fontSize: 16.0),
                   ),
                 ),
               ),
 
               // タイトル: 好きな食べ物の欄
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -76,7 +76,7 @@ class signedProfileView extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     profileViewModel.favoriteFood,
-                    style: TextStyle(fontSize: 16.0),
+                    style: const TextStyle(fontSize: 16.0),
                   ),
                 ),
               ),
@@ -84,7 +84,6 @@ class signedProfileView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: ElevatedButton(
-                  child: const Text('プロフィールを編集する'),
                   style: ElevatedButton.styleFrom(
                     fixedSize:
                         Size(MediaQuery.of(context).size.width * 0.95, 32),
@@ -92,6 +91,7 @@ class signedProfileView extends StatelessWidget {
                   onPressed: () {
                     // ここでプロフィールの編集ロジックを実装
                   },
+                  child: const Text('プロフィールを編集する'),
                 ),
               ),
             ],

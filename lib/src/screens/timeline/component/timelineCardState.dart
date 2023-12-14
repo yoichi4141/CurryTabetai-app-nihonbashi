@@ -5,7 +5,7 @@ class TimelineCard extends StatefulWidget {
   final TimelineItem item;
   final String image; // ここに画像を追加
 
-  const TimelineCard({
+  const TimelineCard({super.key, 
     required this.item,
     required this.image, // コンストラクターに画像を追加
     // ... other parameters
@@ -31,7 +31,7 @@ class _TimelineCardState extends State<TimelineCard> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                       // Display user avatar or default avatar
                       ),
                   const SizedBox(width: 12),
@@ -47,7 +47,7 @@ class _TimelineCardState extends State<TimelineCard> {
                             color: Colors.black,
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           width: 300,
                           child: Text(
                             widget.item.text,
@@ -65,7 +65,7 @@ class _TimelineCardState extends State<TimelineCard> {
                           decoration: BoxDecoration(
                             image: widget.item.image != null
                                 ? DecorationImage(
-                                    image: NetworkImage(widget.item.image!),
+                                    image: NetworkImage(widget.item.image),
                                     fit: BoxFit.cover,
                                   )
                                 : null,
@@ -73,7 +73,7 @@ class _TimelineCardState extends State<TimelineCard> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: widget.item.image == null
-                              ? Icon(Icons.add)
+                              ? const Icon(Icons.add)
                               : null, // デフォルト表示用のアイコンやウィジェット
                         ),
                       ],
