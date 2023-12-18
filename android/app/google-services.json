@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1050296589192",
+    "project_id": "curryeatingnihonbasi",
+    "storage_bucket": "curryeatingnihonbasi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1050296589192:android:3c1fe383873fd556f5f83d",
+        "android_client_info": {
+          "package_name": "com.example.currytabetaiappnihonbashi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1050296589192-5a1g9kd8nm09tp09cnd0buie9sm6aqdn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDARq6w51GVisnxwIuxAMv-hdFn2ephKew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1050296589192-5a1g9kd8nm09tp09cnd0buie9sm6aqdn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1050296589192-l4eut36nefnmdvors3sl5tn02gjte9fo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.currytabetaiappnihonbashi"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
