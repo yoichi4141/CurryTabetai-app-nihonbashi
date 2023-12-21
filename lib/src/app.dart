@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screens/home/home.dart';
-import 'screens/post/post.dart';
+import 'screens/home/View/home.dart';
+import 'screens/post/viewmodel.dart/post.dart';
 import 'screens/profile/profile.dart';
 import 'screens/timeline/timeline.dart';
 
