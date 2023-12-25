@@ -113,7 +113,14 @@ class HomeScreen extends StatelessWidget {
                 ),
                 Positioned(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      // ここにボタンを押した時に呼ばれるコードを書く
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CurrySearchMap()),
+                      );
+                    },
                     style: style,
                     child: const Text('地図からカリ〜を探す'),
                   ),
