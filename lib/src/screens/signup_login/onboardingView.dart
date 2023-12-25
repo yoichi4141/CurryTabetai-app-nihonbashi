@@ -1,5 +1,5 @@
-import 'package:currytabetaiappnihonbashi/src/signup_login/loginView.dart';
-import 'package:currytabetaiappnihonbashi/src/signup_login/signupView.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/signup_login/loginView.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/signup_login/signupView.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingView extends StatelessWidget {

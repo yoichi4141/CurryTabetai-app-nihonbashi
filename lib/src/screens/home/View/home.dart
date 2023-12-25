@@ -24,24 +24,18 @@ class HomeScreen extends StatelessWidget {
     //カリータイプから探すリスト
     List<String> currytypeimage = [
       'assets/images/indeiacurry.png',
-      'assets/images/minamicurry.png',
-      'assets/images/spicecurry.png',
-      'assets/images/japancurry.png',
-      'assets/images/hotelcurry.png',
       'assets/images/soupcurry.png',
       'assets/images/srilankacurry.png',
       'assets/images/taicurry.png',
+      'assets/images/spicecurry.png',
     ];
     //カリータイプの下のテキスト
     List<String> curryTypeText = [
-      '南インドカリー',
-      'インドカリー',
-      'スパイスカリー',
-      'ジャパンカリー',
-      'ホテルカリー',
-      'スープカリー',
-      'スリランカカリー',
-      'タイカリー',
+      'インドカレー',
+      'スープカレー',
+      'スリランカカレー',
+      'タイカレー',
+      'ネパールカレー',
     ];
 
     //最近オープンしたカリーショップ(仮) TODOデータベースから引っ張るようにする
