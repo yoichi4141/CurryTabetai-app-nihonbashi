@@ -1,7 +1,9 @@
 import 'package:currytabetaiappnihonbashi/src/app.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/home.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/homemap/curryshop.dart';
+
+import 'package:currytabetaiappnihonbashi/src/screens/home/homemap.postviewmodel.dart';
+
 import 'package:currytabetaiappnihonbashi/src/screens/post/view/posttextfield.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/postviewmodel.dart';
 import 'package:flutter/material.dart';
 
 class SignedpostsearchView extends StatefulWidget {
@@ -32,7 +34,7 @@ class _SignedpostsearchViewState extends State<SignedpostsearchView> {
   // データを取得する処理
   void fetchNearShops() {
     nearShopList =
-        CurryShopViewModel().nearShopList.map((shop) => shop.name).toList();
+        PostViewModel().nearShopList.map((shop) => shop.name).toList();
   }
 
   void filterSearchedShops(String input) {
@@ -43,7 +45,7 @@ class _SignedpostsearchViewState extends State<SignedpostsearchView> {
       });
     } else {
       setState(() {
-        searchedShopList = CurryShopViewModel()
+        searchedShopList = PostViewModel()
             .searchedShopList
             .where(
                 (shop) => shop.name.toLowerCase().contains(input.toLowerCase()))

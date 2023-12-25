@@ -1,7 +1,7 @@
 import 'package:currytabetaiappnihonbashi/src/screens/post/view/postsearch.dart';
 import 'package:flutter/material.dart';
 import 'screens/home/View/home.dart';
-import 'screens/post/viewmodel.dart/post.dart';
+import 'screens/post/view/post.dart';
 import 'screens/profile/profile.dart';
 import 'screens/timeline/timeline.dart';
 
