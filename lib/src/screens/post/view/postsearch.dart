@@ -1,7 +1,5 @@
 import 'package:currytabetaiappnihonbashi/src/app.dart';
 
-import 'package:currytabetaiappnihonbashi/src/screens/home/homemap.postviewmodel.dart';
-
 import 'package:currytabetaiappnihonbashi/src/screens/post/view/posttextfield.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/postviewmodel.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +8,7 @@ class SignedpostsearchView extends StatefulWidget {
   const SignedpostsearchView({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _SignedpostsearchViewState createState() => _SignedpostsearchViewState();
 }
 
@@ -61,12 +60,12 @@ class _SignedpostsearchViewState extends State<SignedpostsearchView> {
       appBar: AppBar(
         title: const Text('カリーログ投稿🍛'),
         leading: IconButton(
-          icon: Icon(Icons.clear_outlined),
+          icon: const Icon(Icons.clear_outlined),
           onPressed: () {
             // モーダルを閉じた時にボトムシートしか表示されなくなるので、アプリのスタート画面のルートまで戻る
             Navigator.of(context).popUntil((route) => route.isFirst);
-            Navigator.of(context)
-                .pushReplacement(MaterialPageRoute(builder: (_) => MyApp()));
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (_) => const MyApp()));
           },
         ),
       ),

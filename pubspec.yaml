@@ -23,6 +23,11 @@ dependencies:
   json_annotation: 
   json_serializable: 
   provider:
+  google_maps_flutter: ^2.5.0
+ 
+ 
+  
+  
 
 dev_dependencies:
   flutter_test:

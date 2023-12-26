@@ -1,4 +1,5 @@
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/curryTypeSearchListView.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/currysearchmap.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -114,12 +115,11 @@ class HomeScreen extends StatelessWidget {
                 Positioned(
                   child: ElevatedButton(
                     onPressed: () {
-                      // ここにボタンを押した時に呼ばれるコードを書く
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) => CurrySearchMap()),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Currysearchmap()),
+                      );
                     },
                     style: style,
                     child: const Text('地図からカリ〜を探す'),
