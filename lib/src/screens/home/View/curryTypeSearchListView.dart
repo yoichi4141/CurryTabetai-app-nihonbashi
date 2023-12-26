@@ -45,13 +45,13 @@ class _CurryTypeSearchListViewState extends State<CurryTypeSearchListView> {
                           // サーチバー
                           Padding(
                             padding: EdgeInsets.all(10.0),
-                            child: SearchBar(
-                              hintText: 'ショップを検索',
-                              leading: IconButton(
-                                icon: Icon(Icons.arrow_back_ios),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
+                            child: TextField(
+                              decoration: InputDecoration(
+                                hintText: 'ショップを検索',
+                                prefixIcon: Icon(Icons.search),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
                               ),
                               onChanged: (value) {
                                 viewModel.filterList(value);

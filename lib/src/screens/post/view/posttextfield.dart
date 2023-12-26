@@ -5,7 +5,8 @@ import 'package:intl/intl.dart'; //カレンダーのパッケージ
 import 'package:image_picker/image_picker.dart';
 
 class Posttextfield extends StatefulWidget {
-  const Posttextfield({Key? key}) : super(key: key);
+  final String data;
+  const Posttextfield({Key? key, required this.data}) : super(key: key);
 
   @override
   State<Posttextfield> createState() => _Posttextfield();
@@ -15,7 +16,7 @@ class _Posttextfield extends State<Posttextfield> {
   final TextEditingController _textEditingController = TextEditingController();
   final int maxCharacters = 500; // 最大文字数
   late DateTime selectedDate = DateTime.now(); // 選択された日付を保持する変数
-  File? image; //取得したImageのパスが入ってる
+  File? image;
 
 //カレンダーの関数(showDatePicker=カレンダー)
   Future<void> _selectDate(BuildContext context) async {
@@ -105,7 +106,7 @@ class _Posttextfield extends State<Posttextfield> {
                 padding:
                     EdgeInsets.only(top: 10, right: 20, bottom: 0, left: 20),
                 child: Text(
-                  "Vashon/curry&grill",
+                  widget.data,
                   style: TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.bold,

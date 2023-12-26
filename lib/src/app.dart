@@ -1,6 +1,7 @@
+import 'package:currytabetaiappnihonbashi/src/screens/post/view/postsearch.dart';
 import 'package:flutter/material.dart';
 import 'screens/home/View/home.dart';
-import 'screens/post/viewmodel.dart/post.dart';
+import 'screens/post/view/post.dart';
 import 'screens/profile/profile.dart';
 import 'screens/timeline/timeline.dart';
 
@@ -36,9 +37,19 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   int _selectedIndex = 0;
 
+//投稿画面bottomNavigationBarが選択された時の処理を変更しましたよ〜〜〜
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      if (index == 2) {
+        // 投稿画面が選択された場合、SignedpostsearchView に遷移する
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => SignedpostsearchView(),
+              fullscreenDialog: true,
+            ));
+      }
     });
   }
 
