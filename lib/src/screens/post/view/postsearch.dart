@@ -61,12 +61,7 @@ class _SignedpostsearchViewState extends State<SignedpostsearchView> {
         title: const Text('カリーログ投稿🍛'),
         leading: IconButton(
           icon: const Icon(Icons.clear_outlined),
-          onPressed: () {
-            // モーダルを閉じた時にボトムシートしか表示されなくなるので、アプリのスタート画面のルートまで戻る
-            Navigator.of(context).popUntil((route) => route.isFirst);
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (_) => const MyApp()));
-          },
+          onPressed: () {}, //TODO 戻る実装をつける
         ),
       ),
       body: Autocomplete<String>(
