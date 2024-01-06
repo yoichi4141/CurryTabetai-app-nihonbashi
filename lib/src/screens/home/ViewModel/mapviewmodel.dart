@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:geolocator/geolocator.dart';
 
 //nearShopListとSearchedShopをホットペッパーAPIに変更
 
@@ -28,21 +27,12 @@ class NearShop {
       required this.open});
 
   factory NearShop.fromJson(Map<String, dynamic> nearJson) {
-    print('Assigning values from JSON to NearShop object:');
-    print('ID: ${nearJson['id']}');
-    print('Name: ${nearJson['name']}');
-    print('Genre: ${nearJson['genre']}');
-    print('Address: ${nearJson['address']}');
-    print('Photo: ${nearJson['photo']}');
-    print('Latitude: ${nearJson['lat']}');
-    print('Longitude: ${nearJson['lng']}');
-    print('Open: ${nearJson['open']}');
     return NearShop(
       id: nearJson['id'] ?? '',
       name: nearJson['name'] ?? '',
-      genre: (nearJson['genre'] as Map<String, dynamic>)?['name'] ?? '',
+      genre: (nearJson['genre'] as Map<String, dynamic>)['name'] ?? '',
       address: nearJson['address'] ?? '',
-      photo: (nearJson['photo'] as Map<String, dynamic>)?['mobile']?['l'] ?? '',
+      photo: (nearJson['photo'] as Map<String, dynamic>)['mobile']?['l'] ?? '',
       lat: nearJson['lat']?.toDouble() ?? 0.0,
       lng: nearJson['lng']?.toDouble() ?? 0.0,
       open: nearJson['open'] ?? '',
@@ -50,16 +40,26 @@ class NearShop {
   }
 }
 
-class PostViewModel with ChangeNotifier {
+Future<Position> getCurrentLocation() async {
+  // 許可の確認は行わずに、直接位置情報を取得します
+  Position position = await Geolocator.getCurrentPosition(
+    desiredAccuracy: LocationAccuracy.high,
+  );
+  return position;
+}
+
+class MapViewModel with ChangeNotifier {
   List<NearShop> nearShopList = []; // 初期化は空のリスト
 
   Future<void> hotpepperApi() async {
     var dio = Dio();
-//一旦カリーサーチマップの仮の地点に合わせている（Vashoの場所）
-    double lat = 35.68184103085021;
-    double lng = 139.77912009529513;
-    String keywords = 'カレー';
+    // getCurrentLocationを使ってデバイスの位置情報を取得します
+    Position position = await getCurrentLocation();
 
+    double lat = position.latitude;
+    double lng = position.longitude;
+    print('Latitude: $lat');
+    print('Longitude: $lng');
     // グルメサーチAPIのリクエスト
     Response apiResponse = await dio.get(
       'http://webservice.recruit.co.jp/hotpepper/gourmet/v1/',
@@ -67,13 +67,16 @@ class PostViewModel with ChangeNotifier {
         'key': '96da296d1c80e536',
         'lat': lat.toString(), //一旦カリーサーチマップの仮の地点に合わせている（Vashoの場所）
         'lng': lng.toString(), //一旦カリーサーチマップの仮の地点に合わせている（Vashoの場所）
-        'keyword': keywords,
+        'keyword': 'カレー',
         'range': '3', //1Km圏内
         'order': '4', //距離順
         'format': 'json', // レスポンスの形式を指定する
       },
     );
 // レスポンスの内容をログに出力
+    // 位置情報をプリントして確認します
+    print('Current Latitude: ${position.latitude}');
+    print('Current Longitude: ${position.longitude}');
     print('Response data: ${apiResponse.data}');
 
     // apiResponse.dataをNearShopオブジェクトに変換
@@ -89,11 +92,10 @@ class PostViewModel with ChangeNotifier {
     }).toList();
 
     // リストを更新する前に通知
+    print('ロードされた店舗数: ${nearShopList.length} 店舗: $nearShopList');
 
     nearShopList = newNearShopList;
     notifyListeners();
-
-    print('ロードされた店舗数: ${nearShopList.length} 店舗: $nearShopList');
   }
 
 //SearchedShop
