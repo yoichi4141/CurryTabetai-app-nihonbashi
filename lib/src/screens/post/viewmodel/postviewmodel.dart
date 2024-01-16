@@ -28,15 +28,6 @@ class NearShop {
       required this.open});
 
   factory NearShop.fromJson(Map<String, dynamic> nearJson) {
-    print('Assigning values from JSON to NearShop object:');
-    print('ID: ${nearJson['id']}');
-    print('Name: ${nearJson['name']}');
-    print('Genre: ${nearJson['genre']}');
-    print('Address: ${nearJson['address']}');
-    print('Photo: ${nearJson['photo']}');
-    print('Latitude: ${nearJson['lat']}');
-    print('Longitude: ${nearJson['lng']}');
-    print('Open: ${nearJson['open']}');
     return NearShop(
       id: nearJson['id'] ?? '',
       name: nearJson['name'] ?? '',
@@ -74,7 +65,6 @@ class PostViewModel with ChangeNotifier {
       },
     );
 // レスポンスの内容をログに出力
-    print('Response data: ${apiResponse.data}');
 
     // apiResponse.dataをNearShopオブジェクトに変換
 
@@ -92,8 +82,6 @@ class PostViewModel with ChangeNotifier {
 
     nearShopList = newNearShopList;
     notifyListeners();
-
-    print('ロードされた店舗数: ${nearShopList.length} 店舗: $nearShopList');
   }
 
 //SearchedShop

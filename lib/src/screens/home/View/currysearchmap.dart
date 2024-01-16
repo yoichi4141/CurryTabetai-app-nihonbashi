@@ -1,3 +1,4 @@
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/autocomplete.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/mapviewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -93,19 +94,45 @@ class CurrysearchmapState extends State<Currysearchmap> {
             child: Center(
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: '行きたいカリーショップを入力',
-                    prefixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                      borderSide: const BorderSide(
-                        width: 0, // ボーダーの幅をゼロに設定
-                        style: BorderStyle.none, // ボーダースタイルを設定
+                child: GestureDetector(
+                  onTap: () {
+                    // コンテナがタップされたらオートコンプリートページに遷移
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AutocompleteExample(),
                       ),
+                    );
+                  },
+                  child: Container(
+                    height: 56.0, // GestureDetectorの高さを設定
+                    padding: EdgeInsets.symmetric(vertical: 6.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: const Color.fromARGB(255, 220, 220, 220)),
+                      borderRadius: BorderRadius.circular(12.0),
+                      color: Colors.white, // 背景色を白に設定
                     ),
-                    filled: true,
-                    fillColor: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Icon(Icons.search,
+                              color: Color.fromARGB(255, 0, 0, 0)),
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: Text(
+                            '行きたいカリーショップを入力',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
