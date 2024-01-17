@@ -1,3 +1,4 @@
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/storedetailhome.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/searchViewModel.dart';
 import 'package:flutter/material.dart';
 
@@ -84,11 +85,7 @@ class _AutocompleteExampleState extends State<AutocompleteExample> {
   Widget _buildAutocomplete(BuildContext context, SearchViewModel viewModel) {
     return Autocomplete<String>(
       optionsBuilder: (TextEditingValue textEditingValue) {
-        // if (textEditingValue.text == '') {
-        //   return const Iterable<String>.empty();
-        // }
         if (viewModel.searchShopList.isEmpty) {
-          // If empty, call hotpepperSearch to populate the options
           viewModel.hotpepperSearch(userEnteredText: '');
           return const Iterable<
               String>.empty(); // Return empty until data is loaded
@@ -98,7 +95,7 @@ class _AutocompleteExampleState extends State<AutocompleteExample> {
         return viewModel.searchShopList.where((SearchShop shop) {
           // SearchShop オブジェクト内で検索を行う
           return shop.name.contains(textEditingValue.text.toLowerCase());
-        }).map((SearchShop shop) => shop.name);
+        }).map((SearchShop shop) => '${shop.name} (${shop.id})');
       },
       fieldViewBuilder:
           (context, textEditingController, focusNode, onFieldSubmitted) {
@@ -137,7 +134,16 @@ class _AutocompleteExampleState extends State<AutocompleteExample> {
         );
       },
       onSelected: (String selection) {
-        print('$selectionを選択しました');
+        // 選択された文字列から id を抽出
+        String selectedId = selection.substring(
+            selection.indexOf('(') + 1, selection.indexOf(')'));
+        // 以降、selectedId を使って詳細情報の表示などを行う
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StoredetailHome(id: selectedId),
+          ),
+        );
       },
     );
   }
