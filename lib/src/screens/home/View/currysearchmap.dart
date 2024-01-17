@@ -1,11 +1,15 @@
-import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/postviewmodel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/autocomplete.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/mapviewmodel.dart';
 import 'package:flutter/material.dart';
-
+import 'package:geolocator/geolocator.dart';
 //Googleマップを表示させますよ〜
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
 class Currysearchmap extends StatefulWidget {
-  const Currysearchmap({Key? key}) : super(key: key);
+  const Currysearchmap({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Currysearchmap> createState() => CurrysearchmapState();
@@ -13,24 +17,65 @@ class Currysearchmap extends StatefulWidget {
 
 class CurrysearchmapState extends State<Currysearchmap> {
   late GoogleMapController _mapController;
-  late PostViewModel postViewModel = PostViewModel();
+  late MapViewModel mapViewModel; // postViewModelをプロパティとして追加provider関連
   bool _isSelected = false; //トグルボタンの初期選択状態
   List<String> nearShopList = []; // 近くの店舗リスト（テキストフィールド用）
 
   final _pageController = PageController(
     viewportFraction: 0.85, //0.85くらいで端っこに別のカードが見えてる感じになる
   );
-  //TODO現在地から５Km圏内のカリーショップを表示させるようにする（タイルとピン）
-  //初期位置をVahonに設定してます
-  final CameraPosition _initialCameraPosition = const CameraPosition(
-    target: LatLng(35.68184103085021, 139.77912009529513),
-    zoom: 18,
-  );
+
+  // 初期位置を格納する変数
+  late Future<CameraPosition> _initialCameraPositionFuture;
 
   @override
   void initState() {
     super.initState();
-    postViewModel = PostViewModel(); // PostViewModelのインスタンスを初期化
+    // MapViewModelのインスタンスを取得
+    mapViewModel = Provider.of<MapViewModel>(context, listen: false);
+    // hotpepperApiを呼び出す
+    mapViewModel.hotpepperApi();
+    // 初期位置を取得する関数を呼び出す
+    _initialCameraPositionFuture = _getInitialLocation();
+  }
+
+// 現在地を取得する関数(LocationPermissionに応じた分岐)
+  Future<CameraPosition> _getInitialLocation() async {
+    try {
+      LocationPermission permission = await Geolocator.requestPermission();
+//位置情報の取得をOKした場合ロケーションを取得する
+      if (permission == LocationPermission.whileInUse ||
+          permission == LocationPermission.always) {
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high); //取得ロケーションの精度
+        print('Got position: ${position.latitude}, ${position.longitude}');
+
+        return CameraPosition(
+          target: LatLng(position.latitude, position.longitude),
+          zoom: 15,
+        );
+      } else {
+        // 位置情報が許可されていない場合はてきとうにVashonの位置を返す
+        return CameraPosition(
+          target: LatLng(35.68184103085021, 139.77912009529513),
+          zoom: 15,
+        );
+      }
+    } catch (e) {
+      // エラーが発生した場合は位置情報が許可されていない場合はてきとうにVashonの位置を返す
+      print(e.toString());
+      return CameraPosition(
+        target: LatLng(35.68184103085021, 139.77912009529513),
+        zoom: 15,
+      );
+    }
+  }
+
+//MapViewModelのインスタンスを取得している（これないとカードが描写されない）//TODOリバーポットにする？
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    mapViewModel = Provider.of<MapViewModel>(context, listen: true);
   }
 
   @override
@@ -47,21 +92,47 @@ class CurrysearchmapState extends State<Currysearchmap> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Center(
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: '行きたいカリーショップを入力',
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                      borderSide: BorderSide(
-                        width: 0, // ボーダーの幅をゼロに設定
-                        style: BorderStyle.none, // ボーダースタイルを設定
+                child: GestureDetector(
+                  onTap: () {
+                    // コンテナがタップされたらオートコンプリートページに遷移
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AutocompleteExample(),
                       ),
+                    );
+                  },
+                  child: Container(
+                    height: 56.0, // GestureDetectorの高さを設定
+                    padding: EdgeInsets.symmetric(vertical: 6.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: const Color.fromARGB(255, 220, 220, 220)),
+                      borderRadius: BorderRadius.circular(12.0),
+                      color: Colors.white, // 背景色を白に設定
                     ),
-                    filled: true,
-                    fillColor: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Icon(Icons.search,
+                              color: Color.fromARGB(255, 0, 0, 0)),
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: Text(
+                            '行きたいカリーショップを入力',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -80,29 +151,42 @@ class CurrysearchmapState extends State<Currysearchmap> {
   }
 
   Widget _mapSection() {
-    return GoogleMap(
-      mapType: MapType.normal,
-      initialCameraPosition: _initialCameraPosition,
-      onMapCreated: (GoogleMapController controller) {
-        _mapController = controller;
-      },
-      markers: postViewModel.nearShopList.map(
-        (selectedShop) {
-          return Marker(
-            markerId: MarkerId(selectedShop.uid),
-            position: LatLng(selectedShop.lat, selectedShop.lng),
-            icon: BitmapDescriptor.defaultMarker,
-            onTap: () async {
-              //タップしたマーカー(shop)のindexを取得
-              final index = postViewModel.nearShopList
-                  .indexWhere((nearShop) => nearShop == selectedShop);
-              //タップしたお店がPageViewで表示されるように飛ばす
-              _pageController.jumpToPage(index);
-            },
-          );
-        },
-      ).toSet(),
-    );
+    //_initialCameraPositionFutureの完了を待ってから構築するために FutureBuilderにしている
+    return FutureBuilder<CameraPosition>(
+        future: _initialCameraPositionFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            final initialCameraPosition = snapshot.data!;
+            return GoogleMap(
+              mapType: MapType.normal,
+              initialCameraPosition: initialCameraPosition,
+              onMapCreated: (GoogleMapController controller) {
+                _mapController = controller;
+              },
+              myLocationEnabled: true,
+              markers: mapViewModel.nearShopList.map(
+                (selectedShop) {
+                  return Marker(
+                    markerId: MarkerId(selectedShop.id),
+                    position: LatLng(selectedShop.lat, selectedShop.lng),
+                    icon: BitmapDescriptor.defaultMarker,
+                    onTap: () async {
+                      //タップしたマーカー(shop)のindexを取得
+                      final index = mapViewModel.nearShopList
+                          .indexWhere((nearShop) => nearShop == selectedShop);
+                      //タップしたお店がPageViewで表示されるように飛ばす
+                      _pageController.jumpToPage(index);
+                    },
+                  );
+                },
+              ).toSet(),
+            );
+          }
+        });
   }
 
   Widget _cardSection() {
@@ -112,7 +196,7 @@ class CurrysearchmapState extends State<Currysearchmap> {
       child: PageView(
         onPageChanged: (int index) async {
           //スワイプ後のページのお店を取得
-          final selectedShop = postViewModel.nearShopList.elementAt(index);
+          final selectedShop = mapViewModel.nearShopList.elementAt(index);
           //現在のズームレベルを取得
           final zoomLevel = await _mapController.getZoomLevel();
           //スワイプ後のお店の座標までカメラを移動
@@ -132,7 +216,7 @@ class CurrysearchmapState extends State<Currysearchmap> {
   }
 
   List<Widget> _shopTiles() {
-    final shopTiles = postViewModel.nearShopList.map(
+    final shopTiles = mapViewModel.nearShopList.map(
       (nearShop) {
         return Stack(
           children: [
@@ -147,45 +231,49 @@ class CurrysearchmapState extends State<Currysearchmap> {
                       // テキスト
                       Text(
                         nearShop.name,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        nearShop.location,
-                        style: TextStyle(
+                        nearShop.address,
+                        style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.normal,
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: 8), // テキストと画像の間隔を調整するためのスペース
+                      const SizedBox(height: 8), // テキストと画像の間隔を調整するためのスペース
                       Row(
                         children: [
                           Image.network(
-                            nearShop.image,
+                            nearShop.photo,
                             width: 140,
                             height: 100, // 画像の高さを調整
                             fit: BoxFit.cover,
                           ),
-                          SizedBox(width: 13),
+                          const SizedBox(width: 13),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'ジャンル:${nearShop.genre}',
-                                style: TextStyle(
+                              const Text(
+                                'ジャンル', //TODOはみ出すので他のものに変更
+                                style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.normal,
                                 ),
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              SizedBox(width: 8), // スペース
-                              Text(
-                                '営業時間:${nearShop.time}',
+                              const SizedBox(width: 8), // スペース
+
+                              const Text(
+                                '営業時間', //TODOはみ出すので他のものに変更
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.normal,
                                 ),
+                                softWrap: true, // テキストを折り返す
                               ),
                             ],
                           ),
@@ -197,8 +285,8 @@ class CurrysearchmapState extends State<Currysearchmap> {
               ),
             ),
             Positioned(
-              top: 12,
-              right: 12,
+              top: 8,
+              right: 8,
               //TODOボタンの状態に応じてのファイアーベースを実装
               child: ToggleButtons(
                 isSelected: [_isSelected],
