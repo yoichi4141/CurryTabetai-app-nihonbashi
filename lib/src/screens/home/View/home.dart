@@ -129,24 +129,51 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ホーム'),
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             const Padding(
-              padding: EdgeInsets.all(24.0),
-              child:
-                  Image(image: AssetImage('assets/images/india19-37359.jpg')),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(24.0),
-              child: SearchBar(
-                hintText: '行きたいカリ〜を検索',
-                leading: Icon(Icons.search),
+              padding: EdgeInsets.only(top: 64),
+              child: Image(
+                image: AssetImage('assets/images/homekari2.png'),
+                width: 260,
+                height: 90,
               ),
             ),
+            //TODO実装する
+
+            Padding(
+              padding: EdgeInsets.only(left: 24.0, right: 24.0), // 左右のパディングを追加
+              child: Container(
+                margin: EdgeInsets.zero,
+                height: 49.0, // GestureDetectorの高さを設定
+                padding: EdgeInsets.symmetric(vertical: 6.0),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color: const Color.fromARGB(255, 220, 220, 220)),
+                  borderRadius: BorderRadius.circular(12.0),
+                  color: Colors.white, // 背景色を白に設定
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: Icon(Icons.search,
+                          color: Color.fromARGB(255, 0, 0, 0)),
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        '行きたいカリーショップを入力',
+                        // 他のスタイル設定を行う場合はここに追加
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
             Stack(
               alignment: AlignmentDirectional.center,
               children: <Widget>[
@@ -154,82 +181,66 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.all(24.0),
                   child: Container(
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(8),
                       child: Image.asset(
                         'assets/images/searchbackground.png',
                         fit: BoxFit.cover,
+                        width: 360,
+                        height: 180,
                       ),
                     ),
                   ),
                 ),
-                Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Container(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset(
-                            'assets/images/searchbackground.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      // ここにElevatedButtonを配置します
-                      bottom: 120, // ボタンの位置を調整するための適切な値を指定してください
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          // ボタンが押されたときにチェック関数を実行する
-                          _checkPermissionAndNavigate();
-                        },
-                        style: style,
-                        child: const Text('地図からカリ〜を探す'),
-                      ),
-                    ),
-                  ],
-                ),
                 Positioned(
-                  bottom: 0,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text('近くに$currysearchcount件のカリーショップがあるでしょう〜'),
-                    ],
+                  // ここにElevatedButtonを配置します
+                  bottom: 90, // ボタンの位置を調整するための適切な値を指定してください
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      // ボタンが押されたときにチェック関数を実行する
+                      _checkPermissionAndNavigate();
+                    },
+                    style: style,
+                    child: const Text('地図からカリ〜を探す'),
                   ),
                 ),
               ],
             ),
-            const SizedBox(
-              height: 0,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: Image.asset(
-                'assets/images/kumaluacon.png',
-                width: 100,
-                height: 100,
+            Positioned(
+              bottom: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    '近くに$currysearchcount件のカリーショップがありますね〜',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ],
               ),
             ),
+
             // カリータイプから探す
+            SizedBox(height: 6),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(12.0),
               child: Container(
                 alignment: AlignmentDirectional.topStart,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: 6),
+
+                    Divider(
+                        color: const Color.fromARGB(255, 211, 211, 211),
+                        thickness: 0.5), // 線を挿入
                     const Text(
                       'カリータイプから探す',
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: 20,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -283,18 +294,130 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             // 最近オープンしたカリーショップ
-            const SizedBox(height: 16),
+            const SizedBox(height: 6),
+            Divider(
+                color: Color.fromARGB(255, 211, 211, 211),
+                thickness: 0.5), // 線を挿入
+
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8.0),
               child: Container(
                 alignment: AlignmentDirectional.topStart,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      '最近オープンしたカリーショップ',
+                      '最近いい感じのカリーショップ',
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: List.generate(opencurryshop.length, (index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 150,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    image: DecorationImage(
+                                      image: AssetImage(opencurryshop[index]),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                // 店舗名
+                                const SizedBox(height: 8),
+                                SizedBox(
+                                  width: 150, // 固定したい横幅を指定
+                                  child: Text(
+                                    opencurryshoptext[index],
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow
+                                        .ellipsis, // テキストがはみ出た場合に省略記号で表示する
+                                    maxLines: 1, // 最大行数を指定
+                                  ),
+                                ),
+                                // カリージャンル
+                                const SizedBox(height: 8),
+                                SizedBox(
+                                  width: 150, // 固定したい横幅を指定
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        opencurryshopgenre[index],
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        overflow: TextOverflow
+                                            .ellipsis, // テキストがはみ出た場合に省略記号で表示する
+                                        maxLines: 1, // 最大行数を指定
+                                      ),
+                                      // 文字の間のハイフン
+                                      const SizedBox(height: 8),
+                                      const Text(
+                                        '-',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      // 店舗所在
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        opencurryshoplocation[index],
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        overflow: TextOverflow
+                                            .ellipsis, // テキストがはみ出た場合に省略記号で表示する
+                                        maxLines: 1, // 最大行数を指定
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            // 投稿数が多いカリーショップ
+            const SizedBox(height: 6),
+            Divider(color: Color.fromARGB(255, 211, 211, 211), thickness: 0.5),
+
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                alignment: AlignmentDirectional.topStart,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '最近話題っぽいカリーショップ',
+                      style: TextStyle(
+                        fontSize: 20,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                       ),
