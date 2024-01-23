@@ -11,6 +11,7 @@ class AutocompleteExample extends StatefulWidget {
 
 class _AutocompleteExampleState extends State<AutocompleteExample> {
   final SearchViewModel searchViewModel = SearchViewModel();
+  late TextEditingController textEditingController;
 
   @override
   void initState() {
@@ -20,6 +21,7 @@ class _AutocompleteExampleState extends State<AutocompleteExample> {
 
   Future<void> _initData() async {
     await searchViewModel.hotpepperSearch();
+    textEditingController = TextEditingController();
   }
 
   @override
@@ -62,7 +64,7 @@ class _AutocompleteExampleState extends State<AutocompleteExample> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
-                      fixedSize: Size(260.0, 40.0), // 追加: 幅と高さを指定
+                      fixedSize: Size(220.0, 40.0), // 追加: 幅と高さを指定
                     ),
                     child: Text(
                       '検索',
@@ -95,7 +97,7 @@ class _AutocompleteExampleState extends State<AutocompleteExample> {
         return viewModel.searchShopList.where((SearchShop shop) {
           // SearchShop オブジェクト内で検索を行う
           return shop.name.contains(textEditingValue.text.toLowerCase());
-        }).map((SearchShop shop) => '${shop.name} (${shop.id})');
+        }).map((SearchShop shop) => shop.name);
       },
       fieldViewBuilder:
           (context, textEditingController, focusNode, onFieldSubmitted) {
@@ -133,15 +135,16 @@ class _AutocompleteExampleState extends State<AutocompleteExample> {
           ),
         );
       },
-      onSelected: (String selection) {
-        // 選択された文字列から id を抽出
-        String selectedId = selection.substring(
-            selection.indexOf('(') + 1, selection.indexOf(')'));
-        // 以降、selectedId を使って詳細情報の表示などを行う
+      onSelected: (String selectedShopName) {
+        // 選択された後、対応する SearchShop オブジェクトを検索
+        SearchShop selectedShop = viewModel.searchShopList.firstWhere(
+            (shop) => shop.name == selectedShopName,
+            orElse: () => SearchShop(id: '', name: ''));
+
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => StoredetailHome(id: selectedId),
+            builder: (context) => StoredetailHome(id: selectedShop.id),
           ),
         );
       },

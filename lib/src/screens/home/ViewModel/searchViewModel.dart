@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/autocomplete.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/mapviewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -23,6 +24,7 @@ class SearchShop {
 
 class SearchViewModel with ChangeNotifier {
   List<SearchShop> searchShopList = [];
+
 //この部分{String? userEnteredText})と期待されてる引数の部分深く理解したい
   Future<void> hotpepperSearch({String? userEnteredText}) async {
     var dio = Dio();
@@ -30,7 +32,7 @@ class SearchViewModel with ChangeNotifier {
       'http://webservice.recruit.co.jp/hotpepper/gourmet/v1/',
       queryParameters: {
         'key': '96da296d1c80e536',
-        'keyword': 'カレー  $userEnteredText', // ユーザーが入力した文字列
+        'keyword': 'カレー$userEnteredText', // ユーザーが入力した文字列
         'middle_area': '',
         'Count': 100, //
         'format': 'json', // レスポンスの形式を指定する
@@ -39,7 +41,6 @@ class SearchViewModel with ChangeNotifier {
     );
 
     Map<String, dynamic> jsonData = json.decode(apiResponse.data);
-    print("API Response: ${apiResponse.data}");
 
     List<dynamic>? shopListData = jsonData['results']['shop'];
 
@@ -50,15 +51,17 @@ class SearchViewModel with ChangeNotifier {
         SearchShop searchShop = SearchShop.fromJson(shopData);
 
         // id情報をプリント
-        print('SearchShop ID: ${searchShop.id}');
+
         return SearchShop.fromJson(shopData);
       }).toList();
 
       // オートコンプリートの候補を店舗名に設定
       searchShopList = newSearchShopList;
+
       notifyListeners();
     } else {
       print('shopListData is null');
     }
+    print('これ$searchShopList');
   }
 }

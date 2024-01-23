@@ -1,4 +1,5 @@
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/mapviewmodel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/storedetailsViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/view/postsearch.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator_platform_interface/src/enums/location_permission.dart';
@@ -17,8 +18,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => MapViewModel()),
         // 他の必要なプロバイダーをここに追加できます
+        ChangeNotifierProvider(create: (_) => StoreDetailsViewModel()),
+        ChangeNotifierProvider(create: (_) => MapViewModel()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

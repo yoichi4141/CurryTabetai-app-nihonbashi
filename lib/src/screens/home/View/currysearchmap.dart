@@ -1,4 +1,5 @@
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/autocomplete.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/storedetailhome.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/mapviewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -20,6 +21,7 @@ class CurrysearchmapState extends State<Currysearchmap> {
   late MapViewModel mapViewModel; // postViewModelをプロパティとして追加provider関連
   bool _isSelected = false; //トグルボタンの初期選択状態
   List<String> nearShopList = []; // 近くの店舗リスト（テキストフィールド用）
+  bool isSelected = true;
 
   final _pageController = PageController(
     viewportFraction: 0.85, //0.85くらいで端っこに別のカードが見えてる感じになる
@@ -190,27 +192,40 @@ class CurrysearchmapState extends State<Currysearchmap> {
   }
 
   Widget _cardSection() {
-    return Container(
-      height: 200,
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-      child: PageView(
-        onPageChanged: (int index) async {
-          //スワイプ後のページのお店を取得
-          final selectedShop = mapViewModel.nearShopList.elementAt(index);
-          //現在のズームレベルを取得
-          final zoomLevel = await _mapController.getZoomLevel();
-          //スワイプ後のお店の座標までカメラを移動
-          _mapController.animateCamera(
-            CameraUpdate.newCameraPosition(
-              CameraPosition(
-                target: LatLng(selectedShop.lat, selectedShop.lng),
-                zoom: zoomLevel,
+    return InkWell(
+      onTap: () {
+        //スワイプ中だと要素が小数点になるっぽいのでround
+        final selectedShop =
+            mapViewModel.nearShopList.elementAt(_pageController.page!.round());
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StoredetailHome(id: selectedShop.id),
+          ),
+        );
+      },
+      child: Container(
+        height: 200,
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+        child: PageView(
+          onPageChanged: (int index) async {
+            //スワイプ後のページのお店を取得
+            final selectedShop = mapViewModel.nearShopList.elementAt(index);
+            //現在のズームレベルを取得
+            final zoomLevel = await _mapController.getZoomLevel();
+            //スワイプ後のお店の座標までカメラを移動
+            _mapController.animateCamera(
+              CameraUpdate.newCameraPosition(
+                CameraPosition(
+                  target: LatLng(selectedShop.lat, selectedShop.lng),
+                  zoom: zoomLevel,
+                ),
               ),
-            ),
-          );
-        },
-        controller: _pageController,
-        children: _shopTiles(),
+            );
+          },
+          controller: _pageController,
+          children: _shopTiles(),
+        ),
       ),
     );
   }
@@ -239,12 +254,12 @@ class CurrysearchmapState extends State<Currysearchmap> {
                       Text(
                         nearShop.address,
                         style: const TextStyle(
-                          fontSize: 12,
+                          fontSize: 10,
                           fontWeight: FontWeight.normal,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 8), // テキストと画像の間隔を調整するためのスペース
+                      SizedBox(height: 8),
                       Row(
                         children: [
                           Image.network(
@@ -253,27 +268,119 @@ class CurrysearchmapState extends State<Currysearchmap> {
                             height: 100, // 画像の高さを調整
                             fit: BoxFit.cover,
                           ),
-                          const SizedBox(width: 13),
+                          SizedBox(width: 8),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                'ジャンル', //TODOはみ出すので他のものに変更
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              const SizedBox(width: 8), // スペース
+                              Row(
+                                children: [
+                                  const Text(
+                                    '投稿数 100',
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(width: 8), // スペース
 
-                              const Text(
-                                '営業時間', //TODOはみ出すので他のものに変更
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                                softWrap: true, // テキストを折り返す
+                                  const Text(
+                                    'いいね 100',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(width: 12),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: 4),
+                                  Text('カリージャンル',
+                                      style: TextStyle(fontSize: 9)),
+                                  SizedBox(height: 0),
+                                  Text(
+                                    '${nearShop.genre}',
+                                    style: TextStyle(fontSize: 10),
+                                  ),
+                                  SizedBox(
+                                    height: 6,
+                                  ),
+                                  Container(
+                                    width: 140,
+                                    height: 40,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(width: 0),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text('🍛インドカリーある',
+                                                style: TextStyle(
+                                                    fontSize: 6.0,
+                                                    color: isSelected
+                                                        ? Colors.grey
+                                                        : Colors.black)),
+                                            Text('🍚ビリヤニある',
+                                                style: TextStyle(
+                                                    fontSize: 6.0,
+                                                    color: isSelected
+                                                        ? Colors.grey
+                                                        : Colors.black)),
+                                            Text('🍛ミールスある',
+                                                style: TextStyle(
+                                                    fontSize: 6.0,
+                                                    color: isSelected
+                                                        ? Colors.grey
+                                                        : Colors.black)),
+                                            Text('🫓ナンある',
+                                                style: TextStyle(
+                                                    fontSize: 6.0,
+                                                    color: isSelected
+                                                        ? Colors.grey
+                                                        : Colors.black)),
+                                          ],
+                                        ),
+                                        SizedBox(width: 8),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text('🎧インドBGMある',
+                                                style: TextStyle(
+                                                    fontSize: 6.0,
+                                                    color: isSelected
+                                                        ? Colors.grey
+                                                        : Colors.black)),
+                                            Text('📽️インドムービー鑑賞可',
+                                                style: TextStyle(
+                                                    fontSize: 6.0,
+                                                    color: isSelected
+                                                        ? Colors.grey
+                                                        : Colors.black)),
+                                            Text('🇮🇳ヒンディー語OK',
+                                                style: TextStyle(
+                                                    fontSize: 6.0,
+                                                    color: isSelected
+                                                        ? Colors.grey
+                                                        : Colors.black)),
+                                            Text('🇯🇵日本語difficult',
+                                                style: TextStyle(
+                                                    fontSize: 6.0,
+                                                    color: isSelected
+                                                        ? Colors.grey
+                                                        : Colors.black)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
