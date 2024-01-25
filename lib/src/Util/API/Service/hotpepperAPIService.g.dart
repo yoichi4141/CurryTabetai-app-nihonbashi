@@ -27,8 +27,8 @@ class _HotpepperAPIService implements HotpepperAPIService {
     final _headers = <String, dynamic>{r'Content-Type': 'application/json'};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HotpepperApiResponse>(Options(
+    final _result =
+        await _dio.fetch<String>(_setStreamType<HotpepperApiResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -41,7 +41,7 @@ class _HotpepperAPIService implements HotpepperAPIService {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = HotpepperApiResponse.fromJson(_result.data!);
+    final value = HotpepperApiResponse.fromJson(json.decode(_result.data!));
     return value;
   }
 
