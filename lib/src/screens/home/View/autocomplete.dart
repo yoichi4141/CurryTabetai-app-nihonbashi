@@ -1,5 +1,6 @@
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/storedetailhome.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/searchViewModel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/postviewmodel.dart';
 import 'package:flutter/material.dart';
 
 class AutocompleteExample extends StatefulWidget {
@@ -23,6 +24,14 @@ class _AutocompleteExampleState extends State<AutocompleteExample> {
     await searchViewModel.hotpepperSearch();
     textEditingController = TextEditingController();
   }
+
+  // void _searchAndNavigateToMap(String searchText) async {
+  //   SearchShop selectedShop = searchViewModel.searchShopList.firstWhere(
+  //     (shop) => shop.name == searchText,
+  //     orElse: ()=> SearchedShop(id, name, genre, location, image, lat, lng, time)
+
+  //     )
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +153,8 @@ class _AutocompleteExampleState extends State<AutocompleteExample> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => StoredetailHome(id: selectedShop.id),
+            builder: (context) => StoredetailHome(
+                id: selectedShop.id, name: selectedShop.name), //ここで
           ),
         );
       },

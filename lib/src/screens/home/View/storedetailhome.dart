@@ -1,11 +1,17 @@
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/StoredetailPage.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/googleStoreDetailViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/storedetailsViewModel.dart';
 import 'package:flutter/material.dart';
 
 class StoredetailHome extends StatefulWidget {
   final String id;
+  final String name;
 
-  const StoredetailHome({Key? key, required this.id}) : super(key: key);
+  const StoredetailHome({
+    Key? key,
+    required this.id,
+    required this.name,
+  }) : super(key: key);
 
   @override
   State<StoredetailHome> createState() => StoredetailHomeState();
@@ -13,12 +19,18 @@ class StoredetailHome extends StatefulWidget {
 
 class StoredetailHomeState extends State<StoredetailHome> {
   late StoreDetailsViewModel _storeDetailsViewModel;
+  late GoogleStoreDetailViewModel _googleStoreDetailViewModel;
 
   @override
   void initState() {
     super.initState();
     _storeDetailsViewModel = StoreDetailsViewModel();
-    _fetchData(widget.id);
+    _googleStoreDetailViewModel = GoogleStoreDetailViewModel();
+
+    Future.delayed(Duration.zero, () {
+      _fetchData(widget.id);
+      _fetchGoogleData(widget.name);
+    });
   }
 
 //idをViewmodelに渡す関数
@@ -31,6 +43,15 @@ class StoredetailHomeState extends State<StoredetailHome> {
           () {}); //ウイジェットツリーの再構築（初回描写では値がなかったため※２回目のStoreDetailsViewModelのインスタンスに値が格納されていた多分更新のタイミングが早い）
     } catch (error) {
       // エラーハンドリング
+      print('Error: $error');
+    }
+  }
+
+  Future<void> _fetchGoogleData(String name) async {
+    try {
+      await _googleStoreDetailViewModel.googlefetchData(name: name);
+      setState(() {});
+    } catch (error) {
       print('Error: $error');
     }
   }
@@ -62,7 +83,9 @@ class StoredetailHomeState extends State<StoredetailHome> {
         ),
         body: TabBarView(
           children: [
-            StoreDetailPage(storeDetailsViewModel: _storeDetailsViewModel),
+            StoreDetailPage(
+              storeDetailsViewModel: _storeDetailsViewModel,
+            ),
 
             // タブ2のコンテンツ
             Icon(Icons.directions_transit),

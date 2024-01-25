@@ -200,7 +200,8 @@ class CurrysearchmapState extends State<Currysearchmap> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => StoredetailHome(id: selectedShop.id),
+            builder: (context) =>
+                StoredetailHome(id: selectedShop.id, name: selectedShop.name),
           ),
         );
       },

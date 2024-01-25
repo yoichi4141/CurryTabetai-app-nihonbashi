@@ -1,3 +1,4 @@
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/googleStoreDetailViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/mapviewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/storedetailsViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/view/postsearch.dart';
@@ -21,6 +22,8 @@ class MyApp extends StatelessWidget {
         // 他の必要なプロバイダーをここに追加できます
         ChangeNotifierProvider(create: (_) => StoreDetailsViewModel()),
         ChangeNotifierProvider(create: (_) => MapViewModel()),
+        ChangeNotifierProvider(
+            create: (context) => GoogleStoreDetailViewModel()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
