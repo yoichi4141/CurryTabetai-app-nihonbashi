@@ -1,4 +1,7 @@
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/currysearchmap.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/searchlocationmap.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/storedetailhome.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/locationViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/searchViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/postviewmodel.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +15,14 @@ class AutocompleteExample extends StatefulWidget {
 
 class _AutocompleteExampleState extends State<AutocompleteExample> {
   final SearchViewModel searchViewModel = SearchViewModel();
+  final LocationViewModel locationViewModel =
+      LocationViewModel(); //placeNameのやつ
   late TextEditingController textEditingController;
 
   @override
   void initState() {
     super.initState();
+
     _initData();
   }
 
@@ -25,139 +31,156 @@ class _AutocompleteExampleState extends State<AutocompleteExample> {
     textEditingController = TextEditingController();
   }
 
-  // void _searchAndNavigateToMap(String searchText) async {
-  //   SearchShop selectedShop = searchViewModel.searchShopList.firstWhere(
-  //     (shop) => shop.name == searchText,
-  //     orElse: ()=> SearchedShop(id, name, genre, location, image, lat, lng, time)
-
-  //     )
-  // }
-
   @override
   Widget build(BuildContext context) {
+    final SearchViewModel searchViewModel = SearchViewModel();
+    final LocationViewModel locationViewModel = LocationViewModel();
+    TextEditingController textEditingController;
+
+    Future<void> _initData() async {
+      await searchViewModel.hotpepperSearch();
+      textEditingController = TextEditingController();
+    }
+
+    _initData(); // Call _initData here or in initState depending on your needs
+
     return Scaffold(
       appBar: AppBar(
-        title: _buildAutocomplete(context, searchViewModel),
-      ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Positioned(
-              bottom: 16.0, // 下方向の位置を調整
-              right: 16.0, // 右方向の位置を調整
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      // テキストがタップされたときの処理
-                    },
-                    child: Text(
-                      '件',
-                      style: TextStyle(
-                        color: Colors.black, // テキストの色を設定
-                        fontSize: 14.0, // フォントサイズを設定
-                        fontWeight: FontWeight.bold, // フォントウェイトを太くする
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20.0), // ボタンとテキストの間隔を調整
+        title: Autocomplete<String>(
+          optionsBuilder: (TextEditingValue textEditingValue) {
+            if (searchViewModel.searchShopList.isEmpty) {
+              searchViewModel.hotpepperSearch(userEnteredText: '');
+              return const Iterable<String>.empty();
+            }
 
-                  //テキストフィールドに入力して、
-                  ElevatedButton(
-                    onPressed: () {
-                      // ボタンが押されたときの処理
-                      print('ボタンが押されました！');
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.green, // ボタンの背景色
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      fixedSize: Size(220.0, 40.0), // 追加: 幅と高さを指定
+            return searchViewModel.searchShopList
+                .where((SearchShop shop) =>
+                    shop.name.contains(textEditingValue.text.toLowerCase()))
+                .map((SearchShop shop) => shop.name);
+          },
+          fieldViewBuilder: (
+            context,
+            textEditingController,
+            focusNode,
+            onFieldSubmitted,
+          ) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: textEditingController,
+                  onChanged: (String text) async {
+                    await Future.delayed(Duration(milliseconds: 500));
+                    searchViewModel.hotpepperSearch(userEnteredText: text);
+                  },
+                  focusNode: focusNode,
+                  onFieldSubmitted: (String value) {
+                    onFieldSubmitted();
+                    textEditingController.clear();
+                  },
+                  style: TextStyle(color: Colors.black),
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.only(
+                        top: 4.0,
+                        bottom: 4.0,
+                        left: 16.0,
+                        right: 16.0), // 上部の余白を微調整
+
+                    hintText: '店舗名/場所でカリーを検索',
+                    hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 18, 3, 3)),
                     ),
-                    child: Text(
-                      '検索',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 167, 167, 167)),
+                    ),
+
+                    suffix: ElevatedButton(
+                      onPressed: () async {
+                        print('ボタンが押されました！');
+                        String searchText = textEditingController.text;
+                        print('placeNameボタンのところ: $searchText');
+                        await locationViewModel.loadLocationData(
+                          placeName: searchText,
+                        );
+
+                        double destinationLat =
+                            locationViewModel.locationList.isNotEmpty
+                                ? locationViewModel.locationList[0]
+                                : 0.0;
+
+                        double destinationLng =
+                            locationViewModel.locationList.isNotEmpty
+                                ? locationViewModel.locationList[1]
+                                : 0.0;
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SearchLocationMap(
+                              destinationLat: destinationLat,
+                              destinationLng: destinationLng,
+                            ),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.green,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      child: Text(
+                        '検索',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
-                ],
+                ),
+              ],
+            );
+          },
+          onSelected: (String selectedShopName) {
+            SearchShop selectedShop = searchViewModel.searchShopList.firstWhere(
+              (shop) => shop.name == selectedShopName,
+              orElse: () => SearchShop(id: '', name: ''),
+            );
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => StoredetailHome(
+                  id: selectedShop.id,
+                  name: selectedShop.name,
+                ),
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
-    );
-  }
-
-  Widget _buildAutocomplete(BuildContext context, SearchViewModel viewModel) {
-    return Autocomplete<String>(
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (viewModel.searchShopList.isEmpty) {
-          viewModel.hotpepperSearch(userEnteredText: '');
-          return const Iterable<
-              String>.empty(); // Return empty until data is loaded
-        }
-        //TODOここ考える
-
-        return viewModel.searchShopList.where((SearchShop shop) {
-          // SearchShop オブジェクト内で検索を行う
-          return shop.name.contains(textEditingValue.text.toLowerCase());
-        }).map((SearchShop shop) => shop.name);
-      },
-      fieldViewBuilder:
-          (context, textEditingController, focusNode, onFieldSubmitted) {
-        return TextFormField(
-          controller: textEditingController,
-          onChanged: (String text) async {
-            // テキストが変更されるたびにhotpepperSearchを呼び出す
-            await Future.delayed(Duration(milliseconds: 500)); // 例: 0.5秒の遅延
-            viewModel.hotpepperSearch(userEnteredText: text);
-          },
-          focusNode: focusNode,
-          onFieldSubmitted: (String value) {
-            onFieldSubmitted(
-                //TODOその地点にマップカメラを合わせて周辺のカリーショップをマーカー表示する
-                );
-          },
-          style: TextStyle(color: Colors.black), // Set text color
-          decoration: InputDecoration(
-            hintText: '行きたいカリーショップを入力', // Set hint text
-            hintStyle: TextStyle(
-                color: Colors.black.withOpacity(0.5)), // Set hint text color
-            border: OutlineInputBorder(
-              // Add border
-              borderRadius: BorderRadius.circular(12.0),
-              borderSide:
-                  BorderSide(color: const Color.fromARGB(255, 220, 220, 220)),
+      body: Stack(
+        children: [
+          Positioned(
+            bottom: 0, // 下方向の位置を調整
+            right: 0, // 右方向の位置を調整
+            child: Column(
+              children: [
+                Row(
+                  children: [],
+                ),
+              ],
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.0),
-              borderSide:
-                  BorderSide(color: const Color.fromARGB(255, 220, 220, 220)),
-            ),
-            contentPadding: EdgeInsets.symmetric(
-                vertical: 8.0, horizontal: 12.0), // Adjust padding
-          ),
-        );
-      },
-      onSelected: (String selectedShopName) {
-        // 選択された後、対応する SearchShop オブジェクトを検索
-        SearchShop selectedShop = viewModel.searchShopList.firstWhere(
-            (shop) => shop.name == selectedShopName,
-            orElse: () => SearchShop(id: '', name: ''));
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => StoredetailHome(
-                id: selectedShop.id, name: selectedShop.name), //ここで
-          ),
-        );
-      },
+          )
+        ],
+      ),
     );
   }
 }

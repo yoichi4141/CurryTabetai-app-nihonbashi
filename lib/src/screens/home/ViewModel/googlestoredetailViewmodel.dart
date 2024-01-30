@@ -40,7 +40,7 @@ class GoogleStoreDetailViewModel with ChangeNotifier {
         'https://maps.googleapis.com/maps/api/place/textsearch/json',
         queryParameters: {
           'query': '$name', //TODO ホットペッパーの店舗名
-          'key': 'AIzaSyCWvcjiC_RlqLlNk9RBSiJSZH9eKDtcnr4',
+          'key': '', //キーを空欄にする
         },
       );
 
@@ -58,7 +58,7 @@ class GoogleStoreDetailViewModel with ChangeNotifier {
             'https://maps.googleapis.com/maps/api/place/details/json',
             queryParameters: {
               'place_id': placeId,
-              'key': 'AIzaSyCWvcjiC_RlqLlNk9RBSiJSZH9eKDtcnr4',
+              'key': '', //キーを空欄にする
               'language': 'ja',
             },
           );
