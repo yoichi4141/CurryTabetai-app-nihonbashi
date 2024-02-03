@@ -1,6 +1,7 @@
 import 'package:currytabetaiappnihonbashi/src/Util/API/Model/hotpepperApiResponse.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/FilterSearchView.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curryTypeSearchListViewModel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/storedetailhome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -212,7 +213,17 @@ class _CurryTypeSearchListViewState extends State<CurryTypeSearchListView> {
 
                                         return InkWell(
                                             onTap: () {
-                                              // TODO: 店舗詳細画面へ遷移
+                                              // 詳細画面に遷移
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      StoredetailHome(
+                                                    id: item.id ?? "",
+                                                    name: item.name,
+                                                  ),
+                                                ),
+                                              );
                                             },
 
                                             // エラーメッセージがあれば表示
