@@ -25,7 +25,6 @@ class SearchShop {
 class SearchViewModel with ChangeNotifier {
   List<SearchShop> searchShopList = [];
 
-//この部分{String? userEnteredText})と期待されてる引数の部分深く理解したい
   Future<void> hotpepperSearch({String? userEnteredText}) async {
     var dio = Dio();
     Response apiResponse = await dio.get(
@@ -62,6 +61,5 @@ class SearchViewModel with ChangeNotifier {
     } else {
       print('shopListData is null');
     }
-    print('これ$searchShopList');
   }
 }

@@ -1,24 +1,28 @@
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/autocomplete.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/storedetailhome.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/mapviewmodel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/placeresultViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 //Googleマップを表示させますよ〜
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-class Currysearchmap extends StatefulWidget {
-  const Currysearchmap({
-    Key? key,
-  }) : super(key: key);
+class SearchLocationMap extends StatefulWidget {
+  final double destinationLat;
+  final double destinationLng;
+
+  const SearchLocationMap(
+      {Key? key, required this.destinationLat, required this.destinationLng})
+      : super(key: key);
 
   @override
-  State<Currysearchmap> createState() => CurrysearchmapState();
+  State<SearchLocationMap> createState() => SearchLocationMapState();
 }
 
-class CurrysearchmapState extends State<Currysearchmap> {
+class SearchLocationMapState extends State<SearchLocationMap> {
   late GoogleMapController _mapController;
-  late MapViewModel mapViewModel; // postViewModelをプロパティとして追加provider関連
+  late PlaceResultViewModel placeResultViewModel; //店舗情報を取得するViewmodel
+
   bool _isSelected = false; //トグルボタンの初期選択状態
   List<String> nearShopList = []; // 近くの店舗リスト（テキストフィールド用）
   bool isSelected = true;
@@ -26,58 +30,46 @@ class CurrysearchmapState extends State<Currysearchmap> {
   final _pageController = PageController(
     viewportFraction: 0.85, //0.85くらいで端っこに別のカードが見えてる感じになる
   );
-
   // 初期位置を格納する変数
   late Future<CameraPosition> _initialCameraPositionFuture;
 
   @override
   void initState() {
     super.initState();
-    // MapViewModelのインスタンスを取得
-    mapViewModel = Provider.of<MapViewModel>(context, listen: false);
-    // hotpepperApiを呼び出す
-    mapViewModel.hotpepperApi();
+    // PlaceResultViewModelのインスタンスを取得
+    placeResultViewModel =
+        Provider.of<PlaceResultViewModel>(context, listen: false);
     // 初期位置を取得する関数を呼び出す
-    _initialCameraPositionFuture = _getInitialLocation();
+    _initialCameraPositionFuture = _getDestinationLocation(
+      widget.destinationLat,
+      widget.destinationLng,
+    );
+
+    //近くの店舗情報の取得
+    _fetchNearbyPlaces();
   }
 
-// 現在地を取得する関数(LocationPermissionに応じた分岐)
-  Future<CameraPosition> _getInitialLocation() async {
-    try {
-      LocationPermission permission = await Geolocator.requestPermission();
-//位置情報の取得をOKした場合ロケーションを取得する
-      if (permission == LocationPermission.whileInUse ||
-          permission == LocationPermission.always) {
-        Position position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high); //取得ロケーションの精度
-        print('Got position: ${position.latitude}, ${position.longitude}');
-
-        return CameraPosition(
-          target: LatLng(position.latitude, position.longitude),
-          zoom: 15,
-        );
-      } else {
-        // 位置情報が許可されていない場合はてきとうにVashonの位置を返す
-        return CameraPosition(
-          target: LatLng(35.68184103085021, 139.77912009529513),
-          zoom: 15,
-        );
-      }
-    } catch (e) {
-      // エラーが発生した場合は位置情報が許可されていない場合はてきとうにVashonの位置を返す
-      print(e.toString());
-      return CameraPosition(
-        target: LatLng(35.68184103085021, 139.77912009529513),
-        zoom: 15,
-      );
-    }
+  Future<CameraPosition> _getDestinationLocation(
+    double destinationLat,
+    double destinationLng,
+  ) async {
+    return CameraPosition(
+      target: LatLng(destinationLat, destinationLng),
+      zoom: 15,
+    );
   }
 
-//MapViewModelのインスタンスを取得している（これないとカードが描写されない）//TODOリバーポットにする？
+  void _fetchNearbyPlaces() {
+    placeResultViewModel.placeResultApi(
+        locationList: [widget.destinationLat, widget.destinationLng]);
+  }
+
+  //MapViewModelのインスタンスを取得している（これないとカードが描写されない）//TODOリバーポットにする？
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    mapViewModel = Provider.of<MapViewModel>(context, listen: true);
+    placeResultViewModel =
+        Provider.of<PlaceResultViewModel>(context, listen: true);
   }
 
   @override
@@ -155,48 +147,59 @@ class CurrysearchmapState extends State<Currysearchmap> {
   Widget _mapSection() {
     //_initialCameraPositionFutureの完了を待ってから構築するために FutureBuilderにしている
     return FutureBuilder<CameraPosition>(
-        future: _initialCameraPositionFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            final initialCameraPosition = snapshot.data!;
-            return GoogleMap(
-              mapType: MapType.normal,
-              initialCameraPosition: initialCameraPosition,
-              onMapCreated: (GoogleMapController controller) {
-                _mapController = controller;
-              },
-              myLocationEnabled: true,
-              markers: mapViewModel.nearShopList.map(
-                (selectedShop) {
-                  return Marker(
-                    markerId: MarkerId(selectedShop.id),
-                    position: LatLng(selectedShop.lat, selectedShop.lng),
-                    icon: BitmapDescriptor.defaultMarker,
-                    onTap: () async {
-                      //タップしたマーカー(shop)のindexを取得
-                      final index = mapViewModel.nearShopList
-                          .indexWhere((nearShop) => nearShop == selectedShop);
-                      //タップしたお店がPageViewで表示されるように飛ばす
-                      _pageController.jumpToPage(index);
-                    },
-                  );
-                },
-              ).toSet(),
-            );
-          }
-        });
+      future: _initialCameraPositionFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          final initialCameraPosition = snapshot.data!;
+          return GoogleMap(
+            mapType: MapType.normal,
+            initialCameraPosition: initialCameraPosition,
+            onMapCreated: (GoogleMapController controller) {
+              _mapController = controller;
+            },
+            myLocationEnabled: true,
+            markers: {
+              // 現在地のマーカーはすでにカリーサーチマップで使用しているのでのちほど両方画像に変える
+              Marker(
+                markerId: MarkerId('userLocation'),
+                position: LatLng(initialCameraPosition.target.latitude,
+                    initialCameraPosition.target.longitude),
+                icon: BitmapDescriptor.defaultMarkerWithHue(
+                    BitmapDescriptor.hueBlue),
+                infoWindow: InfoWindow(title: 'Your Location'),
+              ),
+              // 近くの店舗のマーカーを追加
+              ...placeResultViewModel.nearbyPlaces.map((selectedShop) {
+                return Marker(
+                  markerId: MarkerId(selectedShop.id),
+                  position: LatLng(selectedShop.lat, selectedShop.lng),
+                  icon: BitmapDescriptor.defaultMarker,
+                  onTap: () async {
+                    //タップしたマーカー(shop)のindexを取得
+                    final index = placeResultViewModel.nearbyPlaces
+                        .indexWhere((nearShop) => nearShop == selectedShop);
+                    //タップしたお店がPageViewで表示されるように飛ばす
+                    _pageController.jumpToPage(index);
+                  },
+                );
+              }),
+            },
+          );
+        }
+      },
+    );
   }
 
   Widget _cardSection() {
     return InkWell(
       onTap: () {
         //スワイプ中だと要素が小数点になるっぽいのでround
-        final selectedShop =
-            mapViewModel.nearShopList.elementAt(_pageController.page!.round());
+        final selectedShop = placeResultViewModel.nearbyPlaces
+            .elementAt(_pageController.page!.round());
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -211,7 +214,8 @@ class CurrysearchmapState extends State<Currysearchmap> {
         child: PageView(
           onPageChanged: (int index) async {
             //スワイプ後のページのお店を取得
-            final selectedShop = mapViewModel.nearShopList.elementAt(index);
+            final selectedShop =
+                placeResultViewModel.nearbyPlaces.elementAt(index);
             //現在のズームレベルを取得
             final zoomLevel = await _mapController.getZoomLevel();
             //スワイプ後のお店の座標までカメラを移動
@@ -232,7 +236,7 @@ class CurrysearchmapState extends State<Currysearchmap> {
   }
 
   List<Widget> _shopTiles() {
-    final shopTiles = mapViewModel.nearShopList.map(
+    final shopTiles = placeResultViewModel.nearbyPlaces.map(
       (nearShop) {
         return Stack(
           children: [

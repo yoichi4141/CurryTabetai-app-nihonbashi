@@ -40,6 +40,7 @@ class NearShop {
   }
 }
 
+//Currysearchmap用(初回のマップ)
 Future<Position> getCurrentLocation() async {
   // 許可の確認は行わずに、直接位置情報を取得します
   Position position = await Geolocator.getCurrentPosition(
@@ -95,3 +96,5 @@ class MapViewModel with ChangeNotifier {
     notifyListeners();
   }
 }
+
+//SearchLocationMap用(位置情報を自分で選択した場合のマップ)

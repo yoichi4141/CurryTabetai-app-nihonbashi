@@ -1,3 +1,4 @@
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/googleStoreDetailViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/storedetailsViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -21,18 +22,30 @@ class StoreDetailPageState extends State<StoreDetailPage> {
   late double lat;
   late double lng;
   bool isSelected = true;
+  late GoogleStoreDetailViewModel googleStoreDetailViewModel;
 
   @override
   void initState() {
     super.initState();
     storeDetailsViewModel = widget.storeDetailsViewModel;
+    googleStoreDetailViewModel = GoogleStoreDetailViewModel();
+    _initializeGoogleStoreDetailViewModel();
 
     // 遅延処理を追加
     Future.delayed(Duration(seconds: 1), () {
-      setState(() {
-        // ここにウィジェットの描画を設定する
-      });
+      setState(() {});
     });
+  }
+
+  Future<void> _initializeGoogleStoreDetailViewModel() async {
+    try {
+      await googleStoreDetailViewModel.googlefetchData();
+      // データ取得後に setState を呼び出してウィジェットを再構築
+      setState(() {});
+    } catch (error) {
+      // エラー処理を行う（例: エラーメッセージをログに出力）
+      print('Error initializing GoogleStoreDetailViewModel: $error');
+    }
   }
 
   Widget _mapImage() {
@@ -71,11 +84,63 @@ class StoreDetailPageState extends State<StoreDetailPage> {
     );
   }
 
+  Widget _buildInfoText(String name) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        child: Column(
+          children: [
+            SizedBox(height: 8),
+            Divider(color: Colors.grey, thickness: 0.5),
+            FutureBuilder(
+              future: googleStoreDetailViewModel.googlefetchData(name: name),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (googleStoreDetailViewModel
+                      .googleStoreDetailinformation.isNotEmpty) {
+                    List<String> infoList = [
+                      '住所: ${googleStoreDetailViewModel.googleStoreDetailinformation.isNotEmpty ? (googleStoreDetailViewModel.googleStoreDetailinformation[0].formattedAddress ?? '取得できませんでした').split('\n').take(2).join('\n').replaceFirst(RegExp(r'^[^0-9]*\d{0}'), '') : '取得できませんでした'}',
+                      'TEL: ${googleStoreDetailViewModel.googleStoreDetailinformation.isNotEmpty ? googleStoreDetailViewModel.googleStoreDetailinformation[0].formattedPhoneNumber ?? '取得できませんでした' : '取得できませんでした'}',
+                      'HP: ${googleStoreDetailViewModel.googleStoreDetailinformation.isNotEmpty ? googleStoreDetailViewModel.googleStoreDetailinformation[0].website ?? '取得できませんでした' : '取得できませんでした'}',
+                      '現在: ${googleStoreDetailViewModel.googleStoreDetailinformation.isNotEmpty ? googleStoreDetailViewModel.googleStoreDetailinformation[0].openingHours != null ? googleStoreDetailViewModel.googleStoreDetailinformation[0].openingHours.openNow ? '営業中' : '休業中' : '取得できませんでした' : '取得できませんでした'}',
+                      '営業時間:\n${googleStoreDetailViewModel.googleStoreDetailinformation.isNotEmpty ? googleStoreDetailViewModel.googleStoreDetailinformation[0].openingHours != null ? googleStoreDetailViewModel.googleStoreDetailinformation[0].openingHours.weekdayText.isNotEmpty ? '${googleStoreDetailViewModel.googleStoreDetailinformation[0].openingHours.weekdayText.join('\n')}' : '取得できませんでした' : '取得できませんでした' : '取得できませんでした'}\n',
+                    ];
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: infoList
+                          .expand((info) => [
+                                Text(
+                                  info,
+                                  style: TextStyle(fontSize: 12.0),
+                                ),
+                                if (info != infoList.last)
+                                  Divider(color: Colors.grey, thickness: 0.5),
+                              ])
+                          .toList(),
+                    );
+                  } else {
+                    // Handle the case where data is empty
+                    return Text('No information available');
+                  }
+                } else {
+                  // Handle other connection states
+                  return CircularProgressIndicator();
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer<StoreDetailsViewModel>(
-        builder: (context, storeDetailsViewModel, child) {
+      body: Consumer2<StoreDetailsViewModel, GoogleStoreDetailViewModel>(
+        builder: (context, storeDetailsViewModel, googleStoreDetailViewModel,
+            child) {
           return SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.all(16.0),
@@ -141,26 +206,6 @@ class StoreDetailPageState extends State<StoreDetailPage> {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
-                              ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(10.0), // 任意の角丸の半径
-                                child: Image.network(
-                                  '${widget.storeDetailsViewModel.storedetailinformation[0].photo}',
-                                  width: 200.0,
-                                  height: 150.0,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(10.0), // 任意の角丸の半径
-                                child: Image.network(
-                                  '${widget.storeDetailsViewModel.storedetailinformation[0].photo}',
-                                  width: 200.0,
-                                  height: 150.0,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
                               ClipRRect(
                                 borderRadius:
                                     BorderRadius.circular(10.0), // 任意の角丸の半径
@@ -359,75 +404,8 @@ class StoreDetailPageState extends State<StoreDetailPage> {
                         SizedBox(height: 12),
                         Center(child: _mapImage()),
                         SizedBox(height: 8),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 8),
-                            Divider(color: Colors.grey, thickness: 0.5), // 線を挿入
-                            Text(
-                              ' 住所:グーグルAPIから',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Divider(color: Colors.grey, thickness: 0.5), // 線を挿入
-                            Text(
-                              ' TEL:グーグルAPIから',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Divider(color: Colors.grey, thickness: 0.5), // 線を挿入
-                            Text(
-                              ' HP:グーグルAPIから',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Divider(color: Colors.grey, thickness: 0.5), // 線を挿入
-                            Text(
-                              ' 定休日:グーグルAPIから',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Divider(color: Colors.grey, thickness: 0.5), // 線を挿入
-                            Text(
-                              ' 営業時間:グーグルAPIから',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Divider(color: Colors.grey, thickness: 0.5), // 線を挿入
-                            Text(
-                              ' 料金:グーグルAPIから',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Divider(color: Colors.grey, thickness: 0.5), // 線を挿入
-                            Text(
-                              ' アクセス:グーグルAPIから',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Divider(color: Colors.grey, thickness: 0.5), // 線を挿入
-                            Text(
-                              ' 駐車場:グーグルAPIから',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                              ),
-                            ),
-                          ],
-                        ),
+                        _buildInfoText(widget.storeDetailsViewModel
+                            .storedetailinformation[0].name),
                       ]
                     : [Text('')],
               ),
