@@ -1,7 +1,7 @@
 import 'package:currytabetaiappnihonbashi/src/Util/API/Model/hotpepperApiResponse.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/FilterSearchView.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curryTypeSearchListViewModel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/View/storedetailhome.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_Home_View.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';

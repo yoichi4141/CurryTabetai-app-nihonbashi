@@ -1,6 +1,6 @@
-import 'package:currytabetaiappnihonbashi/src/screens/home/View/autocomplete.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/View/storedetailhome.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/mapviewmodel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/curry_Map_Autocomplete_View.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_Home_View.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_NearshopAPI_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 //Googleマップを表示させますよ〜
