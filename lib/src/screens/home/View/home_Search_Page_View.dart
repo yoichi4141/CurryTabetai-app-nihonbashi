@@ -1,3 +1,5 @@
+//ホーム画面から遷移する検索機能
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/home_Search_Filltersearch_View.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_Home_View.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_LocationAPI_ViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/home_Search_Page_Listdete_viewmodel.dart';
@@ -24,6 +26,7 @@ class _HomeCurrySearchViewState extends State<HomeCurrySearchView>
     const Tab(text: '都道府県'),
     const Tab(text: '条件'),
   ];
+  String? selectedStationApiKeyword;
 
 //オートコンプリートとTabController初期化している
   @override
@@ -136,7 +139,20 @@ class _HomeCurrySearchViewState extends State<HomeCurrySearchView>
         ],
       ),
       resizeToAvoidBottomInset: true, // キーボードが表示されるときにウィジェットが自動的に位置を変更する
-      bottomNavigationBar: Footer(),
+      bottomNavigationBar: Footer(
+        selectedStationApiKeyword: selectedStationApiKeyword,
+        onTap: (value) {
+          print('selectedStationApiKeyword: $selectedStationApiKeyword');
+
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => HomeCurryFillterSearch(
+                  value: value, // ここでパラメータ名と値を指定します
+                  searchKeyword: selectedStationApiKeyword),
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -152,11 +168,9 @@ class _SearchTabContentState extends State<SearchTabContent> {
   String? selectedPrefecture;
   String? selectedRailway;
   String? selectedStation;
+  String? selectedListtapStation;
 
-  bool? selectedRegionCheckbox; // チェックボックスの状態を保持するフィールド
-  bool? selectedPrefectureCheckbox; // selectedPrefectureCheckboxの初期値
-  bool? selectedRailwayCheckbox = false; // selectedRailwayCheckboxの初期値をここで設定
-  bool? selectedStationCheckbox = false; // selectedStationCheckboxの初期値をここで設定
+  bool? selectedStationCheckbox; // selectedStationCheckboxの初期値をここで設定
   bool showCheckboxes = false; // チェックボックスの表示状態を管理するフラグ
 
   @override
@@ -166,8 +180,8 @@ class _SearchTabContentState extends State<SearchTabContent> {
     selectedPrefecture = '';
     selectedRailway = '';
     selectedStation = '';
-    selectedRegionCheckbox = false;
-    selectedPrefectureCheckbox = false;
+    selectedListtapStation = '';
+    selectedStationCheckbox = false;
   }
 
   List<String> regionsList = SearchTab.regionsList;
@@ -175,88 +189,32 @@ class _SearchTabContentState extends State<SearchTabContent> {
       SearchTab.prefectureList;
   Map<String, List<Map<String, dynamic>>> railwayList = SearchTab.railwayList;
   Map<String, List<Map<String, dynamic>>> stationList = SearchTab.stationList;
-  String? selectedStationApiKeyword;
-  String? selectedrRailwayApiKeyword;
 
-  //TODO沿線と駅のメソッドに変更する
-  void handlerailwayCheckboxTap(bool? checked, String selectedRegionParam) {
-    setState(() {
-      selectedRailway = selectedRegionParam;
-      selectedRailwayCheckbox = checked ?? false;
-
-      // 新しい値が正しいかどうかを確認
-      if (selectedRailwayCheckbox!) {
-        // selectedRailwayCheckboxがtrueの場合のみselectedStationApiKeywordを更新
-        selectedStationApiKeyword = selectedRegionParam;
-        handleRailwaySelection(selectedRegionParam, selectedRegionCheckbox!);
-      }
-
-      print('selectedRailwayCheckbox: $selectedRailwayCheckbox');
-      print('selectedStationCheckbox: $selectedStationCheckbox');
-    });
-  }
-
+//チェックボックスをタップした時に実行されるメソッド
   void handleStationCheckboxTap(bool? checked, String selectedRegionParam) {
-    setState(() {
-      selectedStation = selectedRegionParam;
-      selectedStationCheckbox = checked ?? false;
+    _HomeCurrySearchViewState? state =
+        context.findAncestorStateOfType<_HomeCurrySearchViewState>();
+    if (state != null) {
+      state.setState(() {
+        selectedStation = selectedRegionParam;
+        //TODO selectedListtapStationは、selectedStationと同様のリストの内容を格納するべきです
+        state.selectedStationApiKeyword = selectedStation;
 
-      // 新しい値が正しいかどうかを確認
-      if (selectedStationCheckbox!) {
-        // selectedStationCheckboxがtrueの場合のみselectedrRailwayApiKeywordを更新
-        selectedrRailwayApiKeyword = selectedRegionParam;
-        handleStationSelection(selectedRegionParam, selectedRegionCheckbox!);
-      }
-
-      print('selectedStationCheckbox: $selectedStationCheckbox');
-    });
-  }
-
-//TODO沿線と駅のメソッドに変更するhandleStationCheckboxTapのメソッドを追加する
-
-  void handleRailwaySelection(String selectedRegionParam, bool checked) {
-    // region を selectedRegion に変更
-    if (checked) {
-      _fetchStationList(selectedRegionParam); // region を selectedRegion に変更
-      print('沿線のチェックボックスがタップされました。');
+        print('ボックスの$selectedStation');
+      });
     }
   }
 
-  void handleStationSelection(String selectedRegionParam, bool checked) {
-    // region を selectedRegion に変更
-    if (checked) {
-      _fetchStationList(selectedRegionParam); // region を selectedRegion に変更
-      print('駅のチェックボックスがタップされました。');
-    }
-  }
-
-// 鉄道チェックボックスture処理
-  void _fetchRailwayList(String selectedRegionParam) {
-    // region を selectedRegion に変更
-    List<Map<String, dynamic>>? railways =
-        railwayList[selectedRegion]; // region を selectedRegion に変更
-    if (railways != null) {
-      print('鉄道リストが取得されました。');
-      for (Map<String, dynamic> railwayMap in railways) {
-        String railway = railwayMap['value'];
-        print('鉄道: $railway が選択されました。');
-        selectedRailwayCheckbox = true;
-      }
-    }
-  }
-
-// 駅チェックボックスture処理
-  void _fetchStationList(String selectedRegionParam) {
-    // region を selectedRegion に変更
-    List<Map<String, dynamic>>? stations =
-        stationList[selectedRegion]; // region を selectedRegion に変更
-    if (stations != null) {
-      print('駅リストが取得されました。');
-      for (Map<String, dynamic> stationMap in stations) {
-        String station = stationMap['value'];
-        print('駅: $station が選択されました。');
-        selectedStationCheckbox = true;
-      }
+//リストをタップした時に実行されるメソッド
+  void handleListTap(String selectedItem) {
+    _HomeCurrySearchViewState? state =
+        context.findAncestorStateOfType<_HomeCurrySearchViewState>();
+    if (state != null) {
+      state.setState(() {
+        selectedStation = selectedItem;
+        state.selectedStationApiKeyword = selectedStation;
+        print('リストの$selectedStation');
+      });
     }
   }
 
@@ -281,10 +239,7 @@ class _SearchTabContentState extends State<SearchTabContent> {
     // 表示するリストを決定
     List<String> displayList = regionsList; // デフォル
     if (displayList.contains(selectedRailway) ||
-        displayList.contains(selectedStation)) {
-      // チェックボックスの表示条件を確認し、条件に一致する場合はフラグを更新する
-      showCheckboxes = true; // チェックボックスを表示する
-    }
+        displayList.contains(selectedStation)) {}
 
     if (selectedRegion != null && selectedRegion!.isNotEmpty) {
       List<Map<String, dynamic>>? selectedPrefectureList =
@@ -351,21 +306,7 @@ class _SearchTabContentState extends State<SearchTabContent> {
             itemBuilder: (BuildContext context, int index) {
               String region = displayList[index];
 
-              String? selectedrRailwayApiKeyword = selectedStation;
-              if (selectedRailway != null && selectedRailway!.isNotEmpty) {
-                selectedrRailwayApiKeyword = selectedRailway![0];
-              }
-
-              String? selectedStationApiKeyword = selectedRailway;
-              if (selectedStation != null && selectedStation!.isNotEmpty) {
-                selectedStationApiKeyword = selectedStation![0]; // 最初の要素を選択
-              }
-
-              bool selectedRailwayCheckbox = region == selectedRailway;
-              print(selectedRailway);
               bool selectedStationCheckbox = region == selectedStation;
-              print(selectedStation);
-
               return ListTile(
                 title: Stack(
                   children: [
@@ -376,21 +317,19 @@ class _SearchTabContentState extends State<SearchTabContent> {
                           if (selectedRegion == null ||
                               selectedRegion!.isEmpty) {
                             selectedRegion = displayList[index];
-                            selectedPrefecture = '';
-                            selectedRailway = '';
-                            selectedStation = '';
                           } else if (selectedPrefecture == null ||
                               selectedPrefecture!.isEmpty) {
                             selectedPrefecture = displayList[index];
-                            selectedRailway = '';
-                            selectedStation = '';
                           } else if (selectedRailway == null ||
                               selectedRailway!.isEmpty) {
                             selectedRailway = displayList[index];
-                            selectedStation = '';
                           } else {
                             selectedStation = displayList[index];
+                            handleListTap(displayList[index]);
                           }
+
+                          selectedStationCheckbox = region == selectedStation;
+                          selectedListtapStation = region;
                         });
                       },
                       child: Row(
@@ -409,39 +348,23 @@ class _SearchTabContentState extends State<SearchTabContent> {
                     Positioned.fill(
                       child: Align(
                         alignment: Alignment.centerRight,
-                        child: displayList.contains(selectedRailway)
-                            // 沿線リストが表示されている場合チェックボックスを表示する
-
+                        child: displayList.contains(
+                                selectedStation) // ステーションリストが表示されている場合チェックボックスを表示する
                             ? Checkbox(
-                                //沿線のチェックボックスを使用するバリューを沿線チェックボックスにしている
-                                value: selectedRailwayCheckbox,
+                                //駅のチェックボックスを使用するvalueを駅リストにしている
+                                value: selectedStationCheckbox,
                                 onChanged: (bool? value) {
-                                  handlerailwayCheckboxTap(
+                                  handleStationCheckboxTap(
                                     value,
-                                    region, // 正しい引数として railway を渡します
+                                    region, // 正しい引数として station を渡します
                                   );
                                 },
-                                checkColor: selectedRailwayCheckbox
+
+                                checkColor: !selectedStationCheckbox
                                     ? Colors.black
-                                    : Colors.blue, // チェックマークの色を反映させます
+                                    : Colors.transparent, // チェックマークの色を反映させます
                               )
-                            : displayList.contains(
-                                    selectedStation) // ステーションリストが表示されている場合チェックボックスを表示する
-                                ? Checkbox(
-                                    //駅のチェックボックスを使用するvalueを駅リストにしている
-                                    value: selectedStationCheckbox,
-                                    onChanged: (bool? value) {
-                                      //TODOここのメソッドを追加するhandleStationCheckboxTap
-                                      handleStationCheckboxTap(
-                                        value,
-                                        region, // 正しい引数として station を渡します
-                                      );
-                                    },
-                                    checkColor: selectedStationCheckbox
-                                        ? Colors.black
-                                        : Colors.blue, // チェックマークの色を反映させます
-                                  )
-                                : SizedBox(), // その他の場合は何も表示しません
+                            : SizedBox(), // その他の場合は何も表示しません
                       ),
                     ),
                   ],
@@ -479,11 +402,26 @@ class ConditionTabContent extends StatelessWidget {
 //ボタン
 
 class Footer extends StatelessWidget {
+  final String? selectedStationApiKeyword;
+  final Function(String?) onTap; // コールバック関数
+
+  const Footer({
+    Key? key,
+    required this.selectedStationApiKeyword,
+    required this.onTap,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    //selectedStationApiKeywordが空の場合
+    if (selectedStationApiKeyword == null ||
+        selectedStationApiKeyword!.isEmpty) {
+      return SizedBox(); // 空のSizedBoxを返して非表示にする
+    }
     return ElevatedButton(
       onPressed: () {
-        // ボタンが押されたときの処理
+        onTap(selectedStationApiKeyword); // コールバック関数を呼び出して値を渡す
+        print('コールバックに渡すキーワード$selectedStationApiKeyword');
       },
       style: ElevatedButton.styleFrom(
         primary: Colors.green,
