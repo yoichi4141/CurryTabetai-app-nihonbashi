@@ -1,9 +1,10 @@
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/curryTypeSearchListView.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/View/currysearchmap.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/curry_Map_Search_View.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/home_Search_Page_View.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_Home_View.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/homeViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/View/storedetailhome.dart';
 import 'package:provider/provider.dart';
 import 'package:permission_handler/permission_handler.dart'; //権限管理系のパッケージ今回は位置情報
 
@@ -153,32 +154,44 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: EdgeInsets.only(
                           left: 24.0, right: 24.0), // 左右のパディングを追加
-                      child: Container(
-                        margin: EdgeInsets.zero,
-                        height: 49.0, // GestureDetectorの高さを設定
-                        padding: EdgeInsets.symmetric(vertical: 6.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              color: const Color.fromARGB(255, 220, 220, 220)),
-                          borderRadius: BorderRadius.circular(12.0),
-                          color: Colors.white, // 背景色を白に設定
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16.0),
-                              child: Icon(Icons.search,
-                                  color: Color.fromARGB(255, 0, 0, 0)),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const HomeCurrySearchView(), // 遷移先のページを指定
                             ),
-                            SizedBox(width: 16),
-                            Expanded(
-                              child: Text(
-                                '行きたいカリーショップを入力',
-                                // 他のスタイル設定を行う場合はここに追加
+                          );
+                        },
+                        child: Container(
+                          margin: EdgeInsets.zero,
+                          height: 49.0, // GestureDetectorの高さを設定
+                          padding: EdgeInsets.symmetric(vertical: 6.0),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color:
+                                    const Color.fromARGB(255, 220, 220, 220)),
+                            borderRadius: BorderRadius.circular(12.0),
+                            color: Colors.white, // 背景色を白に設定
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: 16.0),
+                                child: Icon(Icons.search,
+                                    color: Color.fromARGB(255, 0, 0, 0)),
                               ),
-                            ),
-                          ],
+                              SizedBox(width: 16),
+                              Expanded(
+                                child: Text(
+                                  '行きたいカリーショップを探す',
+                                  // 他のスタイル設定を行う場合はここに追加
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -208,8 +221,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               // ボタンが押されたときにチェック関数を実行する
                               _checkPermissionAndNavigate();
                             },
-                            style: style,
-                            child: const Text('地図からカリ〜を探す'),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.green, // ボタンの背景色
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: const Text(
+                              '地図からカリ〜を探す',
+                              style:
+                                  TextStyle(color: Colors.white), // テキストの色を白に設定
+                            ),
                           ),
                         ),
                       ],

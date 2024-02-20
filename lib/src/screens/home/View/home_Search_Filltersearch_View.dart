@@ -6,18 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
-class CurryTypeSearchListView extends StatefulWidget {
-  final String curryType;
+class HomeCurryFillterSearch extends StatefulWidget {
+  final String? value;
+  final dynamic searchKeyword; // 適切な型を指定する必要があります
 
-  const CurryTypeSearchListView({Key? key, required this.curryType})
-      : super(key: key);
+  const HomeCurryFillterSearch({
+    Key? key,
+    this.value,
+    required this.searchKeyword, // 必須のパラメーターとして指定します
+  }) : super(key: key);
 
   @override
-  _CurryTypeSearchListViewState createState() =>
-      _CurryTypeSearchListViewState();
+  _HomeCurryFillterSearchState createState() => _HomeCurryFillterSearchState();
 }
 
-class _CurryTypeSearchListViewState extends State<CurryTypeSearchListView> {
+class _HomeCurryFillterSearchState extends State<HomeCurryFillterSearch> {
   late CurryTypeSearchListViewModel viewModel;
 
   String sortOrder = 'おすすめ順';
@@ -25,7 +28,8 @@ class _CurryTypeSearchListViewState extends State<CurryTypeSearchListView> {
   @override
   void initState() {
     super.initState();
-    viewModel = CurryTypeSearchListViewModel(widget.curryType);
+    viewModel = CurryTypeSearchListViewModel(widget.searchKeyword);
+    print('searchKeyword: ${widget.searchKeyword}');
   }
 
   @override

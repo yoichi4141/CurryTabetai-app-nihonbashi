@@ -1,6 +1,6 @@
-import 'package:currytabetaiappnihonbashi/src/screens/home/View/StoredetailPage.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/googleStoreDetailViewModel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/storedetailsViewModel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_ShopPage_View.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ShopPage_Google_Viewmodel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ShopPage_Hotpepper_ViewModel.dart';
 import 'package:flutter/material.dart';
 
 class StoredetailHome extends StatefulWidget {

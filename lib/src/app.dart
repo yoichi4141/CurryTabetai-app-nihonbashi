@@ -1,13 +1,14 @@
-import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/googleStoreDetailViewModel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/mapviewmodel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/placeresultViewModel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/storedetailsViewModel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ShopPage_Google_Viewmodel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/home_Search_Page_Listdete_viewmodel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_NearshopAPI_viewmodel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_Placeresult_ViewModel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ShopPage_Hotpepper_ViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/view/postsearch.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator_platform_interface/src/enums/location_permission.dart';
 import 'package:provider/provider.dart';
 import 'screens/home/View/home.dart';
-import 'screens/home/ViewModel/locationViewModel.dart';
+import 'screens/home/ViewModel/curry_Map_LocationAPI_ViewModel.dart';
 import 'screens/post/view/post.dart';
 import 'screens/profile/profile.dart';
 import 'screens/timeline/timeline.dart';
@@ -32,6 +33,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => PlaceResultViewModel(),
         ),
+        ChangeNotifierProvider(create: (_) => ConditionTab()),
+        ChangeNotifierProvider(create: (_) => SearchTab()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
