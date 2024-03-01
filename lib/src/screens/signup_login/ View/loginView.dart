@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
-class signupView extends StatefulWidget {
-  const signupView({Key? key}) : super(key: key);
+class loginView extends StatefulWidget {
+  const loginView({Key? key}) : super(key: key);
 
   @override
-  _signupViewState createState() => _signupViewState();
+  _loginViewState createState() => _loginViewState();
 }
 
-class _signupViewState extends State<signupView> {
+class _loginViewState extends State<loginView> {
   String email = '';
   String password = '';
   bool hidePassword = true;
@@ -48,6 +47,7 @@ class _signupViewState extends State<signupView> {
                   setState(() {
                     email = value;
                   });
+                  print(email);
                 },
               ),
               TextFormField(
@@ -70,6 +70,7 @@ class _signupViewState extends State<signupView> {
                   setState(() {
                     password = value;
                   });
+                  print(password);
                 },
               ),
               const SizedBox(height: 15),
@@ -78,7 +79,7 @@ class _signupViewState extends State<signupView> {
                 style: ElevatedButton.styleFrom(
                   fixedSize: Size(400, 50), // 幅と高さを調整
                 ),
-                child: const Text('新規登録する'),
+                child: const Text('ログインする'),
               )
             ],
           ),
@@ -88,7 +89,7 @@ class _signupViewState extends State<signupView> {
   }
 }
 
-// Googleサインインボタン
+// Googleログインボタン
 class GoogleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -107,7 +108,7 @@ class GoogleButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Googleで登録',
+            'Googleでログイン',
             style: TextStyle(color: Colors.black),
           ),
         ],
@@ -116,7 +117,7 @@ class GoogleButton extends StatelessWidget {
   }
 }
 
-// Appleサインインボタン
+// Appleログインボタン
 class AppleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -135,7 +136,7 @@ class AppleButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Appleで登録',
+            'Appleでログイン',
             style: TextStyle(color: Colors.black),
           ),
         ],
