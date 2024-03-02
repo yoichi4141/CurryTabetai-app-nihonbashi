@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
             create: (_) => SignUpViewModel()), // SignUpViewModelを提供
         ChangeNotifierProvider(create: (_) => ProfileViewModel()),
-        ChangeNotifierProvider(create: (_) => MakeprofileViewmodel()),
+        // ChangeNotifierProvider(create: (_) => MakeprofileViewmodel()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

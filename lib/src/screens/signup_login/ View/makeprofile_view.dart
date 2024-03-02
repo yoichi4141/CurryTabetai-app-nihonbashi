@@ -18,14 +18,12 @@ class Makeprofile extends StatefulWidget {
 }
 
 class _MakeprofileState extends State<Makeprofile> {
-  late final MakeprofileViewmodel viewmodel;
-  late final ProfileViewModel profileViewModel;
+  late final ProfileViewModel viewmodel;
 
-  // initStateメソッド内でMakeprofileViewmodelのインスタンスを作成する
   @override
   void initState() {
     super.initState();
-    viewmodel = MakeprofileViewmodel();
+    viewmodel = ProfileViewModel();
   }
 
   String infoText = "";
@@ -74,16 +72,15 @@ class _MakeprofileState extends State<Makeprofile> {
                 ),
                 const SizedBox(height: 8),
                 ElevatedButton(
-                  onPressed: () {
-                    viewmodel.updateProfile().then((_) {
-                      Navigator.popUntil(context, (route) => route.isFirst);
-                      // 新しいProfileViewModelインスタンスを提供して再構築をトリガーする
-                      Provider.of<ProfileViewModel>(context, listen: true);
-                    }).catchError((error) {
+                  onPressed: () async {
+                    try {
+                      await viewmodel.updateProfile();
+                      Navigator.pop(context); // 通常のpopを実行して前の画面に戻る
+                    } catch (error) {
                       setState(() {
                         infoText = "登録NG:${error.toString()}";
                       });
-                    });
+                    }
                   },
                   child: const Text("プロフィール登録する"),
                 ),
