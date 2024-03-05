@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/profile/ViewModel/profileViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/signup_login/%20View/makeprofile_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +18,6 @@ class _SignedProfileViewState extends State<SignedProfileView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     profileViewModel = ProfileViewModel();
   }
 
@@ -52,15 +52,15 @@ class _SignedProfileViewState extends State<SignedProfileView> {
                   // プロフィール画像
                   CircleAvatar(
                       radius: 50.0,
-                      backgroundImage: userData['profileImage'] != null
-                          ? NetworkImage
-                          : (userData['profileImage'])),
+                      backgroundImage:
+                          NetworkImage(userData['profileImage'] ?? '')),
 
-                  // 名前
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Text(
-                      userData['displayName'] ?? '名前はまだない',
+                      userData['displayName']?.isNotEmpty ?? false
+                          ? userData['displayName']!
+                          : '名前はまだない',
                       style: const TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.bold),
                     ),
@@ -85,7 +85,9 @@ class _SignedProfileViewState extends State<SignedProfileView> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        userData['introduction'] ?? 'まだ設定していないでしょう',
+                        userData['introduction']?.isNotEmpty ?? false
+                            ? userData['introduction']!
+                            : '自己紹介してみてね〜',
                         style: const TextStyle(fontSize: 16.0),
                       ),
                     ),
@@ -110,7 +112,9 @@ class _SignedProfileViewState extends State<SignedProfileView> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        userData['favoriteCurry'] ?? 'まだ設定してないね〜',
+                        userData['favoriteCurry']?.isNotEmpty ?? false
+                            ? userData['favoriteCurry']
+                            : '好きなカリーありますか〜',
                         style: const TextStyle(fontSize: 16.0),
                       ),
                     ),
@@ -141,6 +145,13 @@ class _SignedProfileViewState extends State<SignedProfileView> {
                       child: const Text('プロフィールを編集する'),
                     ),
                   ),
+                  const SizedBox(height: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      FirebaseAuth.instance.signOut();
+                    },
+                    child: const Text('ログアウト'),
+                  )
                 ],
               ),
             ),

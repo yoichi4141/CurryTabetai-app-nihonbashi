@@ -15,7 +15,7 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   intl: ^0.17.0
-  image_picker: ^1.0.4
+  image_picker: ^1.0.7
   logger: any
   dio: ^5.4.1
   retrofit: ^4.1.0
@@ -35,6 +35,7 @@ dependencies:
   cloud_firestore: ^4.15.5
   analyzer: ^6.2.0
   firebase_database: ^10.4.6
+  firebase_storage: ^11.6.7
   
   
 

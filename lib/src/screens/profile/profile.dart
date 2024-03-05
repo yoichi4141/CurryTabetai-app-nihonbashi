@@ -77,6 +77,8 @@ void _showSettingModal(BuildContext context) {
                     'プライバシーポリシー', 'https://example.com/photos'),
                 _buildButtonWithWebView(context, Icons.how_to_reg, 'ご利用方法',
                     'https://example.com/video'),
+                _buildButtonWithWebView(context, Icons.how_to_reg, 'ご利用方法',
+                    'https://example.com/video'),
               ],
             ),
           ),

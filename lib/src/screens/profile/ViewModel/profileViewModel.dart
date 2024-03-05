@@ -1,15 +1,16 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currytabetaiappnihonbashi/src/Util/API/Model_Fierbase/firebaseResponseModel.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart'
+    as firebase_storage; //asがないと　firebase_storage.Referenceと書かなければいけなくなる
 
 class ProfileViewModel with ChangeNotifier {
   UserModel? userModel;
   String displayName = '';
-  String? _selectedImagePath; // 画像のパスを保持するString型の変数
+  String? profileImageUrl; // 画像のパスを保持するString型の変数
   String introduction = '';
   String favoriteCurry = '';
   CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -48,7 +49,7 @@ class ProfileViewModel with ChangeNotifier {
       final String userId = user.uid;
       await users.doc(userId).update({
         'displayName': displayName,
-        'profileImage': _selectedImagePath,
+        'profileImage': profileImageUrl,
         'introduction': introduction,
         'favoriteCurry': favoriteCurry,
       });
@@ -81,28 +82,51 @@ class ProfileViewModel with ChangeNotifier {
     }
   }
 
-  // 画像を選択するメソッド
   Future<void> pickImage() async {
-    final ImagePicker _picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
     final XFile? pickedImage =
-        await _picker.pickImage(source: ImageSource.gallery);
+        await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedImage != null) {
-      _selectedImagePath = pickedImage.path; // 画像のパスをセット
+      String imagePath = pickedImage.path; // 画像のパスをセット
+      String? userId = userModel?.userId;
+
+      String imageUrl = await uploadImageToFirebaseStorage(userId!, imagePath);
+      await saveImageUrlToFirestore(userId, imageUrl);
+      //ここで最終的なimageUrlをパラメータprofileImageUrlに代入
+      profileImageUrl = imageUrl;
+
+      print('画像が選択されました');
+      print('選択した画像のpath$imagePath]');
     } else {
-      _selectedImagePath =
-          'assets/images/india19-37359.jpg'; // デフォルトのイメージのパスを設定
+      profileImageUrl = 'assets/images/india19-37359.jpg'; // デフォルトのイメージのパスをセット
+      print('画像が選択されませんでした');
     }
-    notifyListeners(); // 画像が選択されたことを通知
   }
 
-  // 画像を取得するメソッド
-  File? getImageFile() {
-    if (_selectedImagePath != null) {
-      return File(_selectedImagePath!); // 画像のパスからFileオブジェクトを生成して返す
-    } else {
-      return null; // w画像がセットされていない場合はnullを返す
-    }
+//ファイアーストレージに画像パスを保存する
+  Future<String> uploadImageToFirebaseStorage(
+      String userId, String imagePath) async {
+    firebase_storage.Reference storageRef =
+        firebase_storage.FirebaseStorage.instance
+            .ref()
+            //imagesファイルの中から特定のuserIdを持つprofileを参照している
+            .child('images/$userId/profile.jpg');
+    final file = File(imagePath);
+    //putFileメソッドでファイルをcloud storageにアップロードしている
+
+    await storageRef.putFile(file);
+
+    String imageUrl = await storageRef.getDownloadURL();
+    print('パス$imageUrl');
+
+    return imageUrl;
+  }
+
+  Future<void> saveImageUrlToFirestore(String userId, String imageUrl) async {
+    await FirebaseFirestore.instance.collection('users').doc(userId).set({
+      'profileImage': imageUrl,
+    }, SetOptions(merge: true));
   }
 
   void updateDisplayName(String value) {

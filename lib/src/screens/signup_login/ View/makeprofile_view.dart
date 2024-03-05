@@ -1,11 +1,6 @@
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/profile/ViewModel/profileViewModel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/profile/profile.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/signup_login/ViewModel/makeprofile_viewmodel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Makeprofile extends StatefulWidget {
   const Makeprofile({
@@ -43,11 +38,30 @@ class _MakeprofileState extends State<Makeprofile> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 75,
-                  backgroundImage: NetworkImage(
-                      'https://rotti-kanazawa.com/wp-content/uploads/2022/05/rotti_chef.png'),
+                  backgroundImage: viewmodel.profileImageUrl != null
+                      ? (viewmodel.profileImageUrl is FileImage
+                              ? NetworkImage(viewmodel
+                                  .profileImageUrl!) // Firestoreから取得した画像のURLを設定
+                              : const AssetImage(
+                                  'assets/images/india19-37359.jpg') // デフォルトの画像を設定
+                          ) as ImageProvider<Object> // asキーワードで型キャストを追加
+                      : const AssetImage(
+                          'assets/images/india19-37359.jpg'), // デフォルトの画像を設定
+                  child: GestureDetector(
+                    onTap: () {
+                      // デフォルトの画像がタップされたときにpickImageメソッドを実行
+                      viewmodel.pickImage();
+                      print('ピックイメージを実行');
+                    },
+                  ),
                 ),
+                const SizedBox(height: 10),
+                const Text('アイコンを変更する',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    )),
                 const SizedBox(height: 40),
                 TextFormField(
                   decoration: InputDecoration(labelText: "ニックネーム:例 カリーボーイ"),
@@ -85,7 +99,7 @@ class _MakeprofileState extends State<Makeprofile> {
                   child: const Text("プロフィール登録する"),
                 ),
                 const SizedBox(height: 8),
-                Text(infoText)
+                Text(infoText),
               ],
             ),
           ),

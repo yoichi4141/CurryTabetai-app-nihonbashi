@@ -12,7 +12,7 @@ class SignUpViewModel extends ChangeNotifier {
   String errorMessage = ''; //
   //ファイアーストア用
   String displayName = '';
-  String? _selectedImagePath; // 画像のパスを保持するString型の変数
+  String? profileImageUrl; // 画像のパスを保持するString型の変数
   String introduction = '';
   String favoriteCurry = '';
   CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -24,7 +24,7 @@ class SignUpViewModel extends ChangeNotifier {
     try {
       await users.doc(user.uid).set({
         'displayName': displayName,
-        'profileImage': _selectedImagePath,
+        'profileImage': profileImageUrl,
         'introduction': introduction,
         'favoriteCurry': favoriteCurry,
       });

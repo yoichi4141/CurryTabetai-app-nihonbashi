@@ -5,6 +5,7 @@ import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_P
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ShopPage_Hotpepper_ViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/view/postsearch.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/profile/ViewModel/profileViewModel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/signup_login/ViewModel/login_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/signup_login/ViewModel/makeprofile_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/signup_login/ViewModel/signup_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
             create: (_) => SignUpViewModel()), // SignUpViewModelを提供
         ChangeNotifierProvider(create: (_) => ProfileViewModel()),
-        // ChangeNotifierProvider(create: (_) => MakeprofileViewmodel()),
+        ChangeNotifierProvider(create: (_) => LoginViewModel()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
