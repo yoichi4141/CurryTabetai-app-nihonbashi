@@ -1,4 +1,4 @@
-import 'package:currytabetaiappnihonbashi/src/screens/signup_login/onboardingView.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/signup_login/%20View/onboardingView.dart';
 import 'package:flutter/material.dart';
 
 class guestView extends StatelessWidget {

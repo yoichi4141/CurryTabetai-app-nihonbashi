@@ -1,9 +1,10 @@
-import 'package:currytabetaiappnihonbashi/src/screens/signup_login/loginView.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/signup_login/signupView.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/signup_login/%20View/loginView.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/signup_login/%20View/signupView.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingView extends StatelessWidget {
   const OnboardingView({Key? key}) : super(key: key);
+  static const String routeName = '/OnboardingView';
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class OnboardingView extends StatelessWidget {
         ),
         body: const TabBarView(
           children: <Widget>[
-            signupView(),
+            SignupView(),
             loginView(),
           ],
         ),
