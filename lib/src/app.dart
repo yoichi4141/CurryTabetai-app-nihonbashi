@@ -3,7 +3,8 @@ import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/home_Search
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_NearshopAPI_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_Placeresult_ViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ShopPage_Hotpepper_ViewModel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/post/view/postsearch.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/post/view/signd_Post_View.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/postviewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/profile/ViewModel/profileViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/signup_login/ViewModel/login_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/signup_login/ViewModel/makeprofile_viewmodel.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
             create: (_) => SignUpViewModel()), // SignUpViewModelを提供
         ChangeNotifierProvider(create: (_) => ProfileViewModel()),
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
+        ChangeNotifierProvider(create: (_) => PostViewModel()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -76,15 +78,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      if (index == 2) {
-        // 投稿画面が選択された場合、SignedpostsearchView に遷移する
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const SignedpostsearchView(),
-              fullscreenDialog: true,
-            ));
-      }
     });
   }
 
