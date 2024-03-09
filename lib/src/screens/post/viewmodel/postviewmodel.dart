@@ -18,11 +18,8 @@ class PostViewModel with ChangeNotifier {
           .map((shop) => SearchedShop.fromJson(shop.toJson()))
           .toList();
 
-      print('検索されたショップリスト: $searchedShopList');
       notifyListeners();
-    } catch (e) {
-      print('Failed to search shops: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> fetchNearShops() async {
@@ -34,11 +31,8 @@ class PostViewModel with ChangeNotifier {
           .map((shop) => NearShop.fromJson(shop.toJson()))
           .toList();
 
-      print('近くのショップリスト: $nearShopList');
       notifyListeners();
-    } catch (e) {
-      print('Failed to fetch near shops: $e');
-    }
+    } catch (e) {}
   }
 
   Future<HotpepperApiResponse> _fetchHotpepperData({String? keyword}) async {

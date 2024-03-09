@@ -1,7 +1,7 @@
 import 'package:currytabetaiappnihonbashi/src/app.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/home.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/post/view/make_post_View.dart';
 
-import 'package:currytabetaiappnihonbashi/src/screens/post/view/posttextfield.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/postviewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -90,7 +90,13 @@ class _SigndPostViewState extends State<SigndPostView> {
                       title: Text(shop.name),
                       subtitle: Text(shop.address),
                       onTap: () {
-                        // ショップが選択されたときの処理をここに追加
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MakePostView(
+                                    data: shop.name,
+                                  )),
+                        );
                       },
                     ),
                     Divider(color: Colors.grey[1000]), // 薄い灰色の線を描画
