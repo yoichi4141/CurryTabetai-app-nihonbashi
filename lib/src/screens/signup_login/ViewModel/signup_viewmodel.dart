@@ -16,9 +16,10 @@ class SignUpViewModel extends ChangeNotifier {
   String introduction = '';
   String favoriteCurry = '';
   CollectionReference users = FirebaseFirestore.instance.collection('users');
+  CollectionReference posts = FirebaseFirestore.instance.collection('posts');
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  //ファイアーストアにドキュメントを作成するメソッド
+  //users Collectionに profileをセットするメソッド
   Future<void> createUserProfile(User user) async {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     try {
@@ -27,6 +28,13 @@ class SignUpViewModel extends ChangeNotifier {
         'profileImage': profileImageUrl,
         'introduction': introduction,
         'favoriteCurry': favoriteCurry,
+      });
+      await posts.doc(user.uid).set({
+//初回登録用なのでもっと適当なのでいいかも
+        'postText': null,
+        'userName': null,
+        'postImage': null,
+        'profileImage': null,
       });
       print('User profile created successfully.');
     } catch (e) {

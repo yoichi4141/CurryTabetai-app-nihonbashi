@@ -86,7 +86,7 @@ Widget _buildButtonWithWebView(
       print('Open WebView for $title: $url');
     },
     child: Container(
-      color: Colors.transparent,
+      color: const Color.fromARGB(0, 0, 0, 0),
       child: ListTile(
         leading: Icon(icon),
         title: Text(title),

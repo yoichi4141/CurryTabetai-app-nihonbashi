@@ -54,7 +54,7 @@ class _SigndPostViewState extends State<SigndPostView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('カリーログ投稿'),
-        backgroundColor: Color.fromARGB(255, 99, 186, 102), // 背景色を緑色に設定
+        backgroundColor: Color.fromARGB(255, 65, 181, 65), // 背景色を緑色に設定
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +94,10 @@ class _SigndPostViewState extends State<SigndPostView> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => MakePostView(
-                                    data: shop.name,
+                                    data: {
+                                      'name': shop.name,
+                                      'id': shop.id,
+                                    },
                                   )),
                         );
                       },

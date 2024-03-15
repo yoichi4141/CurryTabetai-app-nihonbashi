@@ -2,25 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/timelineViewModel.dart';
 
 class TimelineCard extends StatefulWidget {
-  final TimelineItem item;
-  final String image; // ここに画像を追加
+  final TimelineItem item; //TimelineItem オブジェクトを受け取る
 
-  const TimelineCard({super.key, 
+  const TimelineCard({
+    Key? key, // key パラメータを追加
     required this.item,
-    required this.image, // コンストラクターに画像を追加
-    // ... other parameters
-  });
+  }) : super(key: key);
 
   @override
   _TimelineCardState createState() => _TimelineCardState();
 }
 
 class _TimelineCardState extends State<TimelineCard> {
-  bool favorite = false;
-  bool retweeted = false;
-
   @override
   Widget build(BuildContext context) {
+    print('ショップネーム: ${widget.item.shopName}');
+
     return Center(
       child: InkWell(
         child: Padding(
@@ -31,9 +28,9 @@ class _TimelineCardState extends State<TimelineCard> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CircleAvatar(
-                      // Display user avatar or default avatar
-                      ),
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(widget.item.profileImage),
+                  ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -50,7 +47,19 @@ class _TimelineCardState extends State<TimelineCard> {
                         SizedBox(
                           width: 300,
                           child: Text(
-                            widget.item.text,
+                            widget.item.shopName,
+                            softWrap: true,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 300,
+                          child: Text(
+                            widget.item.postText,
                             softWrap: true,
                             style: const TextStyle(
                               fontSize: 16,
@@ -63,16 +72,16 @@ class _TimelineCardState extends State<TimelineCard> {
                           width: 300,
                           height: 200,
                           decoration: BoxDecoration(
-                            image: widget.item.image != null
+                            image: widget.item.postImage != null
                                 ? DecorationImage(
-                                    image: NetworkImage(widget.item.image),
+                                    image: NetworkImage(widget.item.postImage),
                                     fit: BoxFit.cover,
                                   )
                                 : null,
                             color: Colors.grey,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: widget.item.image == null
+                          child: widget.item.postImage == null
                               ? const Icon(Icons.add)
                               : null, // デフォルト表示用のアイコンやウィジェット
                         ),

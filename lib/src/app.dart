@@ -10,6 +10,7 @@ import 'package:currytabetaiappnihonbashi/src/screens/profile/ViewModel/profileV
 import 'package:currytabetaiappnihonbashi/src/screens/signup_login/ViewModel/login_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/signup_login/ViewModel/makeprofile_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/signup_login/ViewModel/signup_viewmodel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/timelineViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator_platform_interface/src/enums/location_permission.dart';
 import 'package:provider/provider.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
         ChangeNotifierProvider(create: (_) => PostViewModel()),
         ChangeNotifierProvider(create: (_) => MakePostViewModel()),
+        ChangeNotifierProvider(create: (_) => TimelineViewModel()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

@@ -141,6 +141,6 @@ class NearShop {
   }
   @override
   String toString() {
-    return 'Name: $name, Address: $address';
+    return 'Id:$id' 'Name: $name, Address: $address';
   }
 }

@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/make_post_viewmodel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class MakePostView extends StatefulWidget {
-  final String data;
+  final Map<String, dynamic> data;
   const MakePostView({Key? key, required this.data}) : super(key: key);
 
   @override
@@ -20,41 +22,9 @@ class _Posttextfield extends State<MakePostView> {
   late DateTime selectedDate = DateTime.now(); // 選択された日付を保持する変数
   late MakePostViewModel makePostViewModel;
 
-//カレンダーのメソッドここでいい
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2022),
-      lastDate: DateTime(2025),
-      builder: (BuildContext context, Widget? child) {
-        // カスタムウィジェット内で影を除去する
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: const ColorScheme.light().copyWith(
-              primary: Colors.green,
-            ),
-            // カレンダーの背景色を設定
-            dialogBackgroundColor: Colors.green,
-          ),
-          child: ExcludeSemantics(
-            child: child, // カレンダーウィジェットを表示
-          ),
-        );
-      },
-    );
-
-    if (picked != null) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final makePostViewModel = Provider.of<MakePostViewModel>(context);
-//カレンダーの変数ここでいい
     String buttonText =
         '選択した日付: ${selectedDate.year}/${selectedDate.month}/${selectedDate.day}';
     if (selectedDate == DateTime.now()) {
@@ -74,7 +44,13 @@ class _Posttextfield extends State<MakePostView> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                makePostViewModel.createPost(
+                  _textEditingController.text,
+                  widget.data['id'],
+                  widget.data['name'],
+                );
+              },
               style: TextButton.styleFrom(
                 backgroundColor: Colors.green, // ボタンの背景色を緑に設定
                 padding:
@@ -96,7 +72,7 @@ class _Posttextfield extends State<MakePostView> {
               padding: const EdgeInsets.only(
                   top: 10, right: 20, bottom: 10, left: 20),
               child: Text(
-                widget.data,
+                widget.data['name'],
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -112,7 +88,7 @@ class _Posttextfield extends State<MakePostView> {
                     height: 30,
                     child: ElevatedButton(
                       onPressed: () async {
-                        await _selectDate(context);
+                        await makePostViewModel.selectDate(context);
                         setState(() {});
                       },
                       style: ElevatedButton.styleFrom(
@@ -192,9 +168,6 @@ class _Posttextfield extends State<MakePostView> {
                     } else {
                       // 既存の写真を表示するアイテム
                       return GestureDetector(
-                        onTap: () {
-                          // ここで写真を拡大表示する等の操作を行うことができます
-                        },
                         child: Container(
                           width: 120,
                           height: 120,
@@ -205,15 +178,38 @@ class _Posttextfield extends State<MakePostView> {
                             color: Colors.white,
                             border: Border.all(color: Colors.black, width: 0.2),
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.file(
-                              makePostViewModel.images[index],
-                              width: 120, // 画像の幅を設定
-                              height: 120, // 画像の高さを設定
+                          child: Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.file(
+                                  makePostViewModel.images[index],
+                                  width: 120, // 画像の幅を設定
+                                  height: 120, // 画像の高さを設定
 
-                              fit: BoxFit.cover,
-                            ),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: CircleAvatar(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 29, 29, 29),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(
+                                        0), // IconButton のデフォルトのパディングを削除
+                                    child: IconButton(
+                                      icon: Icon(Icons.close),
+                                      color: Colors.white,
+                                      onPressed: () {
+                                        makePostViewModel.deleteImage(index);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       );
