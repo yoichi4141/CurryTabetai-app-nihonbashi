@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/make_post_viewmodel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/timeline/timeline.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,12 +45,19 @@ class _Posttextfield extends State<MakePostView> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: TextButton(
-              onPressed: () {
-                makePostViewModel.createPost(
+              onPressed: () async {
+                //投稿が成功したか確認
+                bool success = await makePostViewModel.createPost(
                   _textEditingController.text,
                   widget.data['id'],
                   widget.data['name'],
                 );
+
+                if (success) {
+                  _textEditingController.clear();
+                  int index = makePostViewModel.images.length - 1;
+                  makePostViewModel.deleteImage(index);
+                }
               },
               style: TextButton.styleFrom(
                 backgroundColor: Colors.green, // ボタンの背景色を緑に設定
@@ -89,7 +97,7 @@ class _Posttextfield extends State<MakePostView> {
                     child: ElevatedButton(
                       onPressed: () async {
                         await makePostViewModel.selectDate(context);
-                        setState(() {});
+                        //TODOここからどこに遷移するか考える
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(

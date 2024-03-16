@@ -1,4 +1,5 @@
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_ShopPage_View.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_timeline_view.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ShopPage_Google_Viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ShopPage_Hotpepper_ViewModel.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,7 @@ class StoredetailHomeState extends State<StoredetailHome> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: Text(""),
@@ -77,7 +78,6 @@ class StoredetailHomeState extends State<StoredetailHome> {
             tabs: [
               Tab(text: '店舗情報'),
               Tab(text: '投稿'),
-              Tab(text: 'अधूरा'),
             ],
           ),
         ),
@@ -88,10 +88,11 @@ class StoredetailHomeState extends State<StoredetailHome> {
             ),
 
             // タブ2のコンテンツ
-            Icon(Icons.directions_transit),
-
+            StoreDetailTimeline(
+              shopId: widget.id,
+              shopName: widget.name,
+            ),
             // タブ3のコンテンツ
-            Icon(Icons.directions_bike),
           ],
         ),
       ),

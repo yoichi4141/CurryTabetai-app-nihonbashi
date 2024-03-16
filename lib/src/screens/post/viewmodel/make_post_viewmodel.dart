@@ -146,7 +146,8 @@ class MakePostViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> createPost(String text, String id, String name) async {
+//boolを返す形に変更
+  Future<bool> createPost(String text, String id, String name) async {
     try {
       final user = FirebaseAuth.instance.currentUser!;
       final userId = user.uid;
@@ -185,11 +186,15 @@ class MakePostViewModel with ChangeNotifier {
             .collection('posts')
             .doc(shopId) // shopIdをドキュメントIDとして使用する
             .set(newPost.toMap());
+        //投稿作成が成功したことを返す
+        return true;
       }
     } catch (e) {
       print('投稿の作成に失敗しました: $e');
     }
-
-    notifyListeners();
+    //投稿の作成が失敗したことを返す
+    return false;
   }
+
+  notifyListeners();
 }

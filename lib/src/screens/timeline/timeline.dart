@@ -12,7 +12,7 @@ class TimelineScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // timelineViewModelインスタンス
     final timelineviewModel =
-        Provider.of<TimelineViewModel>(context, listen: false);
+        Provider.of<TimelineViewModel>(context, listen: true);
 
     return Scaffold(
       appBar: AppBar(
@@ -21,8 +21,6 @@ class TimelineScreen extends StatelessWidget {
       body: StreamBuilder<List<TimelineItem>>(
         stream: timelineviewModel.getTimelineItems(),
         builder: (context, snapshot) {
-          print('Snapshot data: ${snapshot.data}');
-
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
