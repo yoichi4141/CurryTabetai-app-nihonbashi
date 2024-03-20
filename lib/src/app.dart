@@ -2,7 +2,8 @@ import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detai
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/home_Search_Page_Listdete_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_NearshopAPI_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_Placeresult_ViewModel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ShopPage_Hotpepper_ViewModel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ViewModel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Details_HotpepperViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/view/signd_Post_View.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/make_post_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/postviewmodel.dart';
@@ -10,6 +11,7 @@ import 'package:currytabetaiappnihonbashi/src/screens/profile/ViewModel/profileV
 import 'package:currytabetaiappnihonbashi/src/screens/signup_login/ViewModel/login_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/signup_login/ViewModel/makeprofile_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/signup_login/ViewModel/signup_viewmodel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/store_detail_timeline_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/timelineViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator_platform_interface/src/enums/location_permission.dart';
@@ -49,6 +51,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => PostViewModel()),
         ChangeNotifierProvider(create: (_) => MakePostViewModel()),
         ChangeNotifierProvider(create: (_) => TimelineViewModel()),
+        ChangeNotifierProvider(create: (_) => StoreDetailViewmodel()),
+        ChangeNotifierProvider(create: (_) => StoreDitailTimelineViewModel()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

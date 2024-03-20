@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/make_post_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/timelineViewModel.dart';
@@ -12,13 +13,14 @@ class TimelineScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // timelineViewModelインスタンス
     final timelineviewModel =
-        Provider.of<TimelineViewModel>(context, listen: true);
+        Provider.of<TimelineViewModel>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('みんなのカリーログ'),
       ),
       body: StreamBuilder<List<TimelineItem>>(
+        //TODOここでshopId使うどこかの
         stream: timelineviewModel.getTimelineItems(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

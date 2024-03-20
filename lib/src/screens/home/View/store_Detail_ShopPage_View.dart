@@ -1,5 +1,6 @@
+import 'package:currytabetaiappnihonbashi/src/Util/API/Service/shopservice.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ShopPage_Google_Viewmodel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ShopPage_Hotpepper_ViewModel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Details_HotpepperViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ class StoreDetailPageState extends State<StoreDetailPage> {
   late double lng;
   bool isSelected = true;
   late GoogleStoreDetailViewModel googleStoreDetailViewModel;
+  late int likeCount = 0; // いいねの数を格納する変数
 
   @override
   void initState() {
@@ -30,11 +32,25 @@ class StoreDetailPageState extends State<StoreDetailPage> {
     storeDetailsViewModel = widget.storeDetailsViewModel;
     googleStoreDetailViewModel = GoogleStoreDetailViewModel();
     _initializeGoogleStoreDetailViewModel();
+    _fetchLikeCount(); // いいねの数を非同期で取得
+  }
 
-    // 遅延処理を追加
-    Future.delayed(Duration(seconds: 1), () {
-      setState(() {});
-    });
+  Future<void> _fetchLikeCount() async {
+    try {
+      int? count = await widget.storeDetailsViewModel.getLikeCount();
+      if (count != null) {
+        setState(() {
+          likeCount = count;
+        });
+        print('Current like count: $likeCount'); // likeCount の現在の値を表示
+      } else {
+        // エラーが発生した場合の処理
+        print('Error: like count is null');
+      }
+    } catch (error) {
+      // エラーが発生した場合の処理
+      print('Error fetching like count: $error');
+    }
   }
 
   Future<void> _initializeGoogleStoreDetailViewModel() async {
@@ -176,7 +192,7 @@ class StoreDetailPageState extends State<StoreDetailPage> {
                               ),
                               padding: EdgeInsets.all(5.0),
                               child: Text(
-                                '投稿数:10000',
+                                '投稿数:${widget}',
                                 style: TextStyle(
                                   fontSize: 10.0,
                                 ),
@@ -192,7 +208,7 @@ class StoreDetailPageState extends State<StoreDetailPage> {
                               ),
                               padding: EdgeInsets.all(5.0),
                               child: Text(
-                                'いいね:100000',
+                                'いいね:$likeCount', // いいねの数を変数から取得
                                 style: TextStyle(
                                   fontSize: 10.0,
                                 ),

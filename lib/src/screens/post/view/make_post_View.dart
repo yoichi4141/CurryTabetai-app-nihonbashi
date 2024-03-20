@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_Home_View.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_timeline_view.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/make_post_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/timeline/timeline.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -57,6 +59,16 @@ class _Posttextfield extends State<MakePostView> {
                   _textEditingController.clear();
                   int index = makePostViewModel.images.length - 1;
                   makePostViewModel.deleteImage(index);
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => StoredetailHome(
+                              id: widget.data['id'],
+                              name: widget.data['name'],
+                            ),
+                        settings: RouteSettings(arguments: 1)),
+                  );
                 }
               },
               style: TextButton.styleFrom(

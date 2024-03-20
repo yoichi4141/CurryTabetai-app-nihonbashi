@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/make_post_viewmodel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class TimelineItem {
+  final String userId;
+  final String shopId;
   final String postText;
   final String postImage;
   final String userName;
@@ -9,22 +13,8 @@ class TimelineItem {
   final String shopName;
 
   TimelineItem({
-    required this.postText,
-    required this.postImage,
-    required this.userName,
-    required this.profileImage,
-    required this.shopName,
-  });
-}
-
-class StoreTimelineItem {
-  final String postText;
-  final String postImage;
-  final String userName;
-  final String profileImage;
-  final String shopName;
-
-  StoreTimelineItem({
+    required this.userId,
+    required this.shopId,
     required this.postText,
     required this.postImage,
     required this.userName,
@@ -66,6 +56,9 @@ class TimelineViewModel with ChangeNotifier {
 
               // TimelineItemに追加
               timelineItems.add(TimelineItem(
+                userId: userId,
+                //TODOここのshopId
+                shopId: '',
                 postText: postText,
                 userName: userName,
                 postImage: postImage,
@@ -78,45 +71,6 @@ class TimelineViewModel with ChangeNotifier {
       }
 
       return timelineItems;
-    });
-  }
-
-  Stream<List<StoreTimelineItem>> getStoreDetailTimelineItem(String shopId) {
-    print('指定されたショップID: $shopId'); // shopIdの値を出力する
-
-    return _firestore
-        .collection('posts')
-        .where('shopId', isEqualTo: shopId) // 指定されたショップIDに関連する投稿のみを取得
-        .orderBy('createdAt', descending: true)
-        .snapshots()
-        .asyncMap((snapshot) async {
-      List<StoreTimelineItem> storeDetailTimelineItem = [];
-
-      for (var doc in snapshot.docs) {
-        // 投稿のデータを取得
-        Map<String, dynamic>? postData = doc.data() as Map<String, dynamic>?;
-
-        if (postData != null) {
-          String userName =
-              postData['userName'] ?? ''; //displayNameと間違えやすい気をつけて
-          String profileImage = postData['profileImage'] ?? '';
-          String postText = postData['postText'] ?? '';
-          String postImage = postData['postImage'] ?? '';
-          String shopName = postData['shopName'] ?? '';
-          // TimelineItemに追加
-
-          storeDetailTimelineItem.add(StoreTimelineItem(
-            postText: postText,
-            userName: userName,
-            postImage: postImage,
-            profileImage: profileImage,
-            shopName: shopName,
-          ));
-        }
-      }
-      print('StoreDetailTimelineItem: $storeDetailTimelineItem');
-
-      return storeDetailTimelineItem;
     });
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currytabetaiappnihonbashi/src/Util/API/Model_Fierbase/firebaseResponseModel.dart';
+import 'package:currytabetaiappnihonbashi/src/Util/API/Service/shopservice.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -59,7 +60,39 @@ class Post {
   final String shopName;
 }
 
+class Shop {
+  Shop({
+    required this.postNumber,
+    required this.shopNice,
+    required this.shopWant,
+  });
+
+  factory Shop.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    final map = snapshot.data()!;
+    return Shop(
+      postNumber: map['postNumber'],
+      shopNice: List<String>.from(map['shopNice']), // 配列として取得
+      shopWant: map['shopWant'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'postNumber': postNumber,
+      'shopNice': shopNice,
+      'shopWant': shopWant,
+    };
+  }
+
+  final String postNumber;
+  final List<String> shopNice; // 配列として定義
+  final String shopWant;
+}
+
+String shopId = shopId;
+
 class MakePostViewModel with ChangeNotifier {
+  late final ShopService shopService;
   //postsReferenceをグローバル変数として定義
   final postsReference =
       FirebaseFirestore.instance.collection('posts').withConverter<Post>(
@@ -169,6 +202,10 @@ class MakePostViewModel with ChangeNotifier {
         //普通にselectedDate使うとDataTIme型のエラー出るので Firebaseが受け取れる形に変換（ FirebaseはTimestampとして日時を欲しがる）
         final createdAtTimestamp = Timestamp.fromDate(selectedDate);
 
+        final postNumber = '';
+        final shopNice = '';
+        final shopWant = '';
+
         // 新しい投稿を作成
         final newPost = Post(
           createdAt: createdAtTimestamp,
@@ -181,11 +218,23 @@ class MakePostViewModel with ChangeNotifier {
           shopName: shopName,
         );
 
+        final newshop = Shop(
+          postNumber: postNumber,
+          shopNice: [userId],
+          shopWant: shopWant,
+        );
+
         // Firestoreのpostsコレクションに新しい投稿を追加
         await FirebaseFirestore.instance
             .collection('posts')
             .doc(shopId) // shopIdをドキュメントIDとして使用する
             .set(newPost.toMap());
+
+        await FirebaseFirestore.instance
+            .collection('shops')
+            .doc(shopId)
+            .set(newshop.toMap());
+
         //投稿作成が成功したことを返す
         return true;
       }

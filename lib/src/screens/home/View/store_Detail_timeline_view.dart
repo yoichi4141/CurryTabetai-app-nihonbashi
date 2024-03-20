@@ -1,27 +1,39 @@
-import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_CardState.dart';
+import 'package:currytabetaiappnihonbashi/src/Util/API/Service/shopservice.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Ditailtimeline_CardState.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/timeline/component/timelineCardState.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/store_detail_timeline_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/timelineViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StoreDetailTimeline extends StatelessWidget {
+  final String userId;
   final String shopId;
   final String shopName;
   const StoreDetailTimeline({
     Key? key,
+    required this.userId,
     required this.shopId,
     required this.shopName,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    //StoreDetailViewmodelのインスタンス
+
     // timelineViewModelインスタンス
-    final timelineViewModel =
-        Provider.of<TimelineViewModel>(context, listen: false);
+    final storeDitailTimelineViewModel =
+        Provider.of<StoreDitailTimelineViewModel>(context, listen: false);
+    final storeDetailViewmodel =
+        Provider.of<StoreDetailViewmodel>(context, listen: false);
+
+    // timelineViewModelインスタンス
 
     return Scaffold(
-      body: StreamBuilder<List<StoreTimelineItem>>(
-        stream: timelineViewModel.getStoreDetailTimelineItem(shopId),
+      body: StreamBuilder<List<StoreDetailTimelineItem>>(
+        stream: storeDitailTimelineViewModel.getStoreDetailTimelineItem(
+            shopId, userId),
         builder: (context, snapshot) {
           print('storeDatailのデータ: ${snapshot.data}');
 
@@ -44,8 +56,9 @@ class StoreDetailTimeline extends StatelessWidget {
             itemCount: items.length,
             itemBuilder: (context, index) {
               final item = items[index];
-              return StoreTimelineCard(
+              return StoreDitailTimelineCard(
                 item: item,
+                storeDetailViewmodel: storeDetailViewmodel,
               );
             },
           );

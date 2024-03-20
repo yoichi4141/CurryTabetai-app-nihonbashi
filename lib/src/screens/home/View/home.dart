@@ -78,12 +78,12 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
     //最近オープンしたカリーショップ店舗名　TODOデータベースから引っ張るようにする
     List<String> opencurryshoptext = [
-      'Vashon/curry&grillfaaaaaaaaaaaaaaaaa',
-      'Vashon/curry&grill',
-      'Vashon/curry&grill',
-      'Vashon/curry&grill',
-      'Vashon/curry&grill',
-      'Vashon/curry&grill',
+      'coming soon~',
+      'coming soon~',
+      'coming soon~',
+      'coming soon~',
+      'coming soon~',
+      'coming soon~',
     ];
 
     //最近オープンしたカリーショップのカリージャンル　TODOデータベースから引っ張るようにする
@@ -98,12 +98,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     //最近オープンしたカリーショップの所在地　TODOデータベースから引っ張るようにする
     List<String> opencurryshoplocation = [
-      '東京都港区',
-      '東京都港区',
-      '東京都港区',
-      '東京都港区',
-      '東京都港区',
-      '東京都港区',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
     ];
 
     // ElevatedButtonの外側で_checkPermissionAndNavigate関数を定義する
@@ -326,7 +326,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
 
-                    // 最近オープンしたカリーショップ
+                    // 最近いい感じのカリーショップ
                     const SizedBox(height: 6),
                     Divider(
                         color: Color.fromARGB(255, 211, 211, 211),
@@ -475,7 +475,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                    // 投稿数が多いカリーショップ
+                    //投稿数が多いカリーショップ
                     const SizedBox(height: 6),
                     Divider(
                         color: Color.fromARGB(255, 211, 211, 211),

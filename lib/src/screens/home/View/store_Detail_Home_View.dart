@@ -1,7 +1,9 @@
+import 'package:currytabetaiappnihonbashi/src/Util/API/Service/shopservice.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_ShopPage_View.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_timeline_view.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ShopPage_Google_Viewmodel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ShopPage_Hotpepper_ViewModel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Details_HotpepperViewModel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/post/view/make_post_View.dart';
 import 'package:flutter/material.dart';
 
 class StoredetailHome extends StatefulWidget {
@@ -59,16 +61,26 @@ class StoredetailHomeState extends State<StoredetailHome> {
 
   @override
   Widget build(BuildContext context) {
+    int initialTabIndex = 0;
+    final arguments = ModalRoute.of(context)!.settings.arguments;
+    if (arguments != null) {
+      initialTabIndex = arguments as int;
+    }
+
     return DefaultTabController(
       length: 2,
+      initialIndex: initialTabIndex,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(""),
+          title: Text(
+            widget.name,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
           actions: [
             IconButton(
               onPressed: () {},
               icon: Icon(Icons.share),
-              // TODO: シェア機能を追加
+              // シェア機能の追加
             ),
           ],
           bottom: TabBar(
@@ -89,13 +101,89 @@ class StoredetailHomeState extends State<StoredetailHome> {
 
             // タブ2のコンテンツ
             StoreDetailTimeline(
+              userId: '',
               shopId: widget.id,
               shopName: widget.name,
             ),
-            // タブ3のコンテンツ
           ],
         ),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 120,
+              height: 60,
+              child: FloatingActionButton.extended(
+                heroTag: 'いきたいボタン＋カリーログを投稿ボタン',
+                onPressed: () {
+                  //TODO　shopにいきたいとして追加する
+                },
+                label: Text(
+                  'いきたい',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 12,
+                  ),
+                ),
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0), // 角丸を設定
+                ),
+                elevation: 0, // 影をなくす
+              ),
+            ),
+
+            SizedBox(
+              width: 6,
+            ), // ボタン間のスペースを設定
+
+            SizedBox(
+              width: 240,
+              height: 60,
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MakePostView(
+                              data: {
+                                'name': widget.name,
+                                'id': widget.id,
+                              },
+                            ),
+                        settings: RouteSettings(arguments: 1)),
+                  );
+                },
+                label: Text(
+                  'カリーログを投稿',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+                backgroundColor: const Color.fromARGB(255, 75, 180, 79),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0), // 角丸を設定
+                ),
+                elevation: 0, // 影をなくす
+              ),
+            ),
+          ],
+        ),
+        floatingActionButtonLocation: CustomFloatingActionButtonLocation(),
       ),
+    );
+  }
+}
+
+class CustomFloatingActionButtonLocation extends FloatingActionButtonLocation {
+  @override
+  Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
+    // ここでボタンの位置を定義します
+    return Offset(
+      -14,
+      scaffoldGeometry.scaffoldSize.height - 90,
     );
   }
 }
