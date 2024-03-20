@@ -23,7 +23,7 @@ class TimelineItem {
   });
 }
 
-class TimelineViewModel with ChangeNotifier {
+class TimelineItemViewModel with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Stream<List<TimelineItem>> getTimelineItems() {
@@ -53,12 +53,13 @@ class TimelineViewModel with ChangeNotifier {
               String postText = postData['postText'] ?? '';
               String postImage = postData['postImage'] ?? '';
               String shopName = postData['shopName'] ?? '';
+              String shopId = postData['shopId'];
 
               // TimelineItemに追加
               timelineItems.add(TimelineItem(
                 userId: userId,
                 //TODOここのshopId
-                shopId: '',
+                shopId: shopId,
                 postText: postText,
                 userName: userName,
                 postImage: postImage,

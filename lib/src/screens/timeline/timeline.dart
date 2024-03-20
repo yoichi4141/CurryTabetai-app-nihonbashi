@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/make_post_viewmodel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/timeline_ViewModel.dart';
 import 'package:flutter/material.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/timelineViewModel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/timeline_Item_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/timeline/component/timelineCardState.dart';
 import 'package:provider/provider.dart';
 
@@ -12,8 +13,10 @@ class TimelineScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // timelineViewModelインスタンス
+    final timelineitemviewModel =
+        Provider.of<TimelineItemViewModel>(context, listen: false);
     final timelineviewModel =
-        Provider.of<TimelineViewModel>(context, listen: false);
+        Provider.of<TimeLineViewModel>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -21,7 +24,7 @@ class TimelineScreen extends StatelessWidget {
       ),
       body: StreamBuilder<List<TimelineItem>>(
         //TODOここでshopId使うどこかの
-        stream: timelineviewModel.getTimelineItems(),
+        stream: timelineitemviewModel.getTimelineItems(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -42,6 +45,7 @@ class TimelineScreen extends StatelessWidget {
               final item = items[index];
               return TimelineCard(
                 item: item,
+                timeLineViewModel: timelineviewModel,
               );
             },
           );

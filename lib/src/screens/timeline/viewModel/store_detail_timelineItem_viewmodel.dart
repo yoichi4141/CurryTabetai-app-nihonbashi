@@ -21,7 +21,7 @@ class StoreDetailTimelineItem {
   });
 }
 
-class StoreDitailTimelineViewModel with ChangeNotifier {
+class StoreDitailTimelineItemViewModel with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Stream<List<StoreDetailTimelineItem>> getStoreDetailTimelineItem(
       String shopId, String userId) {

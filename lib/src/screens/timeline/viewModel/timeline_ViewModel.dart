@@ -1,9 +1,10 @@
+//TODOここにshopNiceとpostNumberとshopWantメソッドを追加する
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currytabetaiappnihonbashi/src/Util/API/Service/shopservice.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/make_post_viewmodel.dart';
 import 'package:flutter/material.dart';
 
-class StoreDetailViewmodel extends ChangeNotifier {
+class TimeLineViewModel extends ChangeNotifier {
   final ShopService shopService = ShopService();
   late final FirebaseFirestore _firestore;
 
@@ -22,7 +23,7 @@ class StoreDetailViewmodel extends ChangeNotifier {
     }
   }
 
-  //いいねのアップロード
+//いいねのアップロード
   Future<void> addLikeToShopFire(String shopId, String userId) async {
     try {
       final db = FirebaseFirestore.instance;
@@ -63,6 +64,27 @@ class StoreDetailViewmodel extends ChangeNotifier {
     }
   }
 
+  Future<bool> isShopNice(String shopId, String userId) async {
+    try {
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection('shops')
+          .doc(shopId)
+          .get();
+      if (docSnapshot.exists) {
+        final shopData = docSnapshot.data();
+        if (shopData != null && shopData['shopNice'] is List) {
+          final shopNiceList = shopData['shopNice'] as List;
+          print('timeline Nice List: $shopNiceList'); // 追加したprint文
+          return shopNiceList.length >= 2; // リストの要素数が2つ以上ならtrueを返す
+        }
+      }
+      return false;
+    } catch (error) {
+      print('Error checking if shop is nice: $error');
+      return false;
+    }
+  }
+
   Future<int> getLikeCount(String shopId) async {
     try {
       print('Fetching like count for shopId: $shopId'); // shopId をプリント
@@ -78,26 +100,6 @@ class StoreDetailViewmodel extends ChangeNotifier {
       print('Error getting like count: $e');
       // エラー時はゼロを返すなど、適切なエラー処理を行う
       return 0;
-    }
-  }
-
-  Future<bool> isShopNice(String shopId, String userId) async {
-    try {
-      final docSnapshot = await FirebaseFirestore.instance
-          .collection('shops')
-          .doc(shopId)
-          .get();
-      if (docSnapshot.exists) {
-        final shopData = docSnapshot.data();
-        if (shopData != null && shopData['shopNice'] is List) {
-          final shopNiceList = shopData['shopNice'] as List;
-          return shopNiceList.length >= 2; // リストの要素数が2つ以上ならtrueを返す
-        }
-      }
-      return false;
-    } catch (error) {
-      print('Error checking if shop is nice: $error');
-      return false;
     }
   }
 }

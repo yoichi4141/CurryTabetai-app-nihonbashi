@@ -103,32 +103,5 @@ class ShopService {
     }
   }
 
-//いきたいねのアップロード
-  Future<void> addWantToShopFire(String shopId, String userId) async {
-    try {
-      // Firestoreにいいね情報を保存
-      await FirebaseFirestore.instance
-          .collection('shops')
-          .doc(shopId)
-          .update({'shopNice.$userId': true});
-    } catch (error) {
-      print('Error adding like to shop: $error');
-      throw error;
-    }
-  }
-
-//いきたいねのアップデート
-  Future<void> updateWantToShopFire(
-      String shopId, String userId, bool shopWant) async {
-    try {
-      // Firestoreにいいね情報を更新
-      await FirebaseFirestore.instance
-          .collection('shops')
-          .doc(shopId)
-          .update({'shopWant.$userId': shopWant});
-    } catch (error) {
-      print('Error updating like status: $error');
-      throw error;
-    }
-  }
+//いきたいねを実装
 }
