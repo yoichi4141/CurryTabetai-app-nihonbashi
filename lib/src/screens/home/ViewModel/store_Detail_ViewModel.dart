@@ -91,6 +91,7 @@ class StoreDetailViewmodel extends ChangeNotifier {
         final shopData = docSnapshot.data();
         if (shopData != null && shopData['shopNice'] is List) {
           final shopNiceList = shopData['shopNice'] as List;
+          print('Shop Nice List: $shopNiceList'); // 追加したprint文
           return shopNiceList.length >= 2; // リストの要素数が2つ以上ならtrueを返す
         }
       }

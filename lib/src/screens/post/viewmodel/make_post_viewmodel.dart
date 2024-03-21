@@ -229,7 +229,6 @@ class MakePostViewModel with ChangeNotifier {
             .collection('posts')
             .doc(shopId) // shopIdをドキュメントIDとして使用する
             .set(newPost.toMap());
-
         await FirebaseFirestore.instance
             .collection('shops')
             .doc(shopId)

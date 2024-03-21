@@ -78,6 +78,4 @@ class StoreDetailsViewModel with ChangeNotifier {
       notifyListeners();
     }
   }
-
-  getLikeCount() {}
 }

@@ -39,7 +39,7 @@ class ShopData {
 }
 
 //shopコレクションに格納各データを格納する
-class ShopService {
+class ShopService extends ChangeNotifier {
   final CollectionReference shopCollection =
       FirebaseFirestore.instance.collection('shops');
 
@@ -103,5 +103,31 @@ class ShopService {
     }
   }
 
-//いきたいねを実装
+  Future<int> countLikes(String shopId) async {
+    try {
+      print('aaa: $shopId'); // shopId の値をプリント
+
+      final DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+          await FirebaseFirestore.instance
+              .collection('shops')
+              .doc(shopId)
+              .get();
+      if (docSnapshot.exists) {
+        final Map<String, dynamic>? data = docSnapshot.data();
+
+        if (data != null) {
+          final List<dynamic> shopNiceList = data['shopNice'];
+          // shopNiceList の要素数が2の場合は1、それ以外は0を返す
+          return shopNiceList.length == 2 ? 1 : 0;
+        } else {
+          return 0;
+        }
+      } else {
+        return 0;
+      }
+    } catch (error) {
+      print('Error counting likes:$error');
+      throw error;
+    }
+  }
 }

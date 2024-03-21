@@ -1,17 +1,22 @@
 import 'package:currytabetaiappnihonbashi/src/Util/API/Service/shopservice.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ShopPage_Google_Viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Details_HotpepperViewModel.dart';
+import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/make_post_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class StoreDetailPage extends StatefulWidget {
   final StoreDetailsViewModel storeDetailsViewModel;
+  final ShopService shopService;
+  final String shopId;
 
-  const StoreDetailPage({
-    Key? key,
-    required this.storeDetailsViewModel,
-  }) : super(key: key);
+  const StoreDetailPage(
+      {Key? key,
+      required this.storeDetailsViewModel,
+      required this.shopService,
+      required this.shopId})
+      : super(key: key);
 
   @override
   State<StoreDetailPage> createState() => StoreDetailPageState();
@@ -37,12 +42,13 @@ class StoreDetailPageState extends State<StoreDetailPage> {
 
   Future<void> _fetchLikeCount() async {
     try {
-      int? count = await widget.storeDetailsViewModel.getLikeCount();
+      int? count = await widget.shopService.countLikes(widget.shopId);
       if (count != null) {
         setState(() {
           likeCount = count;
         });
         print('Current like count: $likeCount'); // likeCount の現在の値を表示
+        print('Fetched like count: $count'); // 取得したいいねの数を表示
       } else {
         // エラーが発生した場合の処理
         print('Error: like count is null');

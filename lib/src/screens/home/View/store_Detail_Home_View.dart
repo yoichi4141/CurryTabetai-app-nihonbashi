@@ -23,12 +23,14 @@ class StoredetailHome extends StatefulWidget {
 class StoredetailHomeState extends State<StoredetailHome> {
   late StoreDetailsViewModel _storeDetailsViewModel;
   late GoogleStoreDetailViewModel _googleStoreDetailViewModel;
+  late ShopService _shopService;
 
   @override
   void initState() {
     super.initState();
     _storeDetailsViewModel = StoreDetailsViewModel();
     _googleStoreDetailViewModel = GoogleStoreDetailViewModel();
+    _shopService = ShopService();
 
     Future.delayed(Duration.zero, () {
       _fetchData(widget.id);
@@ -97,6 +99,8 @@ class StoredetailHomeState extends State<StoredetailHome> {
           children: [
             StoreDetailPage(
               storeDetailsViewModel: _storeDetailsViewModel,
+              shopService: _shopService,
+              shopId: widget.id,
             ),
 
             // タブ2のコンテンツ

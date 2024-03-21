@@ -1,3 +1,4 @@
+import 'package:currytabetaiappnihonbashi/src/Util/API/Service/shopservice.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/curryTypeSearchListView.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/curry_Map_Search_View.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/home_Search_Page_View.dart';
@@ -9,7 +10,9 @@ import 'package:provider/provider.dart';
 import 'package:permission_handler/permission_handler.dart'; //権限管理系のパッケージ今回は位置情報
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -113,7 +116,9 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const Currysearchmap(),
+            builder: (context) => Currysearchmap(
+              shopId: '',
+            ),
           ),
         );
       } else {
