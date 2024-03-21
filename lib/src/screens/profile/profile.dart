@@ -20,6 +20,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _checkLoginStatus();
   }
 
+//ログイン状態の確認
   void _checkLoginStatus() {
     // FirebaseAuthenticationでログイン状態を取得
     bool isLogin = FirebaseAuth.instance.currentUser != null;

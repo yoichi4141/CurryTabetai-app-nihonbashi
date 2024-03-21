@@ -39,7 +39,6 @@ class _SignedProfileViewState extends State<SignedProfileView> {
           if (users.isEmpty) {
             return Text('No user found');
           }
-//TODO変更する　最初のユーザーデータを取得
           Map<String, dynamic> userData =
               users[0].data() as Map<String, dynamic>;
 

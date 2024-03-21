@@ -1,3 +1,4 @@
+import 'package:currytabetaiappnihonbashi/src/Util/API/Service/shopservice.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/curry_Map_Autocomplete_View.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_Home_View.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_NearshopAPI_viewmodel.dart';
@@ -8,8 +9,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class Currysearchmap extends StatefulWidget {
+  final String shopId;
   const Currysearchmap({
     Key? key,
+    required this.shopId,
   }) : super(key: key);
 
   @override
@@ -22,7 +25,7 @@ class CurrysearchmapState extends State<Currysearchmap> {
   bool _isSelected = false; //トグルボタンの初期選択状態
   List<String> nearShopList = []; // 近くの店舗リスト（テキストフィールド用）
   bool isSelected = true;
-
+  late int likeCount = 0; // いいねの数を格納する変数
   final _pageController = PageController(
     viewportFraction: 0.85, //0.85くらいで端っこに別のカードが見えてる感じになる
   );
@@ -273,27 +276,27 @@ class CurrysearchmapState extends State<Currysearchmap> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  const Text(
-                                    '投稿数 100',
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(width: 8), // スペース
+                              // Row(
+                              //   children: [
+                              //     const Text(
+                              //       '投稿数 00',
+                              //       style: const TextStyle(
+                              //         fontSize: 10,
+                              //         fontWeight: FontWeight.normal,
+                              //       ),
+                              //       overflow: TextOverflow.ellipsis,
+                              //     ),
+                              //     const SizedBox(width: 8), // スペース
 
-                                  const Text(
-                                    'いいね 100',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              //     Text(
+                              //       'いいね:$likeCount', // いいねの数を変数から取得
+                              //       style: TextStyle(
+                              //         fontSize: 10,
+                              //         fontWeight: FontWeight.normal,
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
                               SizedBox(width: 12),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -392,25 +395,25 @@ class CurrysearchmapState extends State<Currysearchmap> {
                 ),
               ),
             ),
-            Positioned(
-              top: 8,
-              right: 8,
-              //TODOボタンの状態に応じてのファイアーベースを実装
-              child: ToggleButtons(
-                isSelected: [_isSelected],
-                onPressed: (int index) {
-                  setState(() {
-                    _isSelected = !_isSelected;
-                  });
-                },
-                borderRadius: BorderRadius.circular(0),
-                borderWidth: 0,
-                selectedColor: Colors.white,
-                children: const <Widget>[
-                  Icon(Icons.star),
-                ],
-              ),
-            ),
+            // Positioned(
+            //   top: 8,
+            //   right: 8,
+            //   //TODOボタンの状態に応じてのファイアーベースを実装
+            //   child: ToggleButtons(
+            //     isSelected: [_isSelected],
+            //     onPressed: (int index) {
+            //       setState(() {
+            //         _isSelected = !_isSelected;
+            //       });
+            //     },
+            //     borderRadius: BorderRadius.circular(0),
+            //     borderWidth: 0,
+            //     selectedColor: Colors.white,
+            //     children: const <Widget>[
+            //       Icon(Icons.star),
+            //     ],
+            //   ),
+            // ),
           ],
         );
       },

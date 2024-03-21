@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:currytabetaiappnihonbashi/src/Util/API/Service/shopservice.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_NearshopAPI_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
 //検索ショップ
-class Storedetail {
+class HotpepperStoredetail {
   String id;
   String name; // 店舗名
   String genre; // カリージャンル
@@ -14,7 +15,7 @@ class Storedetail {
   double lng; // マップピン用　経度
   String open; //営業時間
 
-  Storedetail({
+  HotpepperStoredetail({
     required this.id,
     required this.name,
     required this.genre,
@@ -25,8 +26,8 @@ class Storedetail {
     required this.open,
   });
 
-  factory Storedetail.fromJson(Map<String, dynamic> storedetailJson) {
-    return Storedetail(
+  factory HotpepperStoredetail.fromJson(Map<String, dynamic> storedetailJson) {
+    return HotpepperStoredetail(
       id: storedetailJson['id'] ?? '',
       name: storedetailJson['name'] ?? '',
       genre: (storedetailJson['genre'] as Map<String, dynamic>)['name'] ?? '',
@@ -42,7 +43,7 @@ class Storedetail {
 }
 
 class StoreDetailsViewModel with ChangeNotifier {
-  List<Storedetail> storedetailinformation = [];
+  List<HotpepperStoredetail> storedetailinformation = [];
 
   Future<void> fetchData({String? id}) async {
     print('fetchData called');
@@ -61,13 +62,15 @@ class StoreDetailsViewModel with ChangeNotifier {
 
     List<dynamic>? storedetailtData = jsonData['results']['shop'];
     if (storedetailtData != null) {
-      List<Storedetail> newstoredetailtData = storedetailtData.map((shopData) {
+      List<HotpepperStoredetail> newstoredetailtData =
+          storedetailtData.map((shopData) {
         // SearchShopオブジェクトの作成
-        Storedetail shopdetailt = Storedetail.fromJson(shopData);
+        HotpepperStoredetail shopdetailt =
+            HotpepperStoredetail.fromJson(shopData);
 
         // id情報をプリント
 
-        return Storedetail.fromJson(shopData);
+        return HotpepperStoredetail.fromJson(shopData);
       }).toList();
 
       storedetailinformation = newstoredetailtData;

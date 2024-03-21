@@ -1,3 +1,4 @@
+import 'package:currytabetaiappnihonbashi/src/Util/API/Service/shopservice.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/curryTypeSearchListView.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/curry_Map_Search_View.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/home_Search_Page_View.dart';
@@ -9,7 +10,9 @@ import 'package:provider/provider.dart';
 import 'package:permission_handler/permission_handler.dart'; //権限管理系のパッケージ今回は位置情報
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -78,12 +81,12 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
     //最近オープンしたカリーショップ店舗名　TODOデータベースから引っ張るようにする
     List<String> opencurryshoptext = [
-      'Vashon/curry&grillfaaaaaaaaaaaaaaaaa',
-      'Vashon/curry&grill',
-      'Vashon/curry&grill',
-      'Vashon/curry&grill',
-      'Vashon/curry&grill',
-      'Vashon/curry&grill',
+      'coming soon~',
+      'coming soon~',
+      'coming soon~',
+      'coming soon~',
+      'coming soon~',
+      'coming soon~',
     ];
 
     //最近オープンしたカリーショップのカリージャンル　TODOデータベースから引っ張るようにする
@@ -98,12 +101,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     //最近オープンしたカリーショップの所在地　TODOデータベースから引っ張るようにする
     List<String> opencurryshoplocation = [
-      '東京都港区',
-      '東京都港区',
-      '東京都港区',
-      '東京都港区',
-      '東京都港区',
-      '東京都港区',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
     ];
 
     // ElevatedButtonの外側で_checkPermissionAndNavigate関数を定義する
@@ -113,7 +116,9 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const Currysearchmap(),
+            builder: (context) => Currysearchmap(
+              shopId: '',
+            ),
           ),
         );
       } else {
@@ -326,7 +331,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
 
-                    // 最近オープンしたカリーショップ
+                    // 最近いい感じのカリーショップ
                     const SizedBox(height: 6),
                     Divider(
                         color: Color.fromARGB(255, 211, 211, 211),
@@ -475,7 +480,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                    // 投稿数が多いカリーショップ
+                    //投稿数が多いカリーショップ
                     const SizedBox(height: 6),
                     Divider(
                         color: Color.fromARGB(255, 211, 211, 211),
