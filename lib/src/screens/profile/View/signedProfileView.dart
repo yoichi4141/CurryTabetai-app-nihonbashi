@@ -3,7 +3,6 @@ import 'package:currytabetaiappnihonbashi/src/screens/profile/ViewModel/profileV
 import 'package:currytabetaiappnihonbashi/src/screens/signup_login/%20View/makeprofile_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 //ログイン後のプロフィール画面です
 class SignedProfileView extends StatefulWidget {

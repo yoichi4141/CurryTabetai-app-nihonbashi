@@ -1,9 +1,6 @@
-import 'package:currytabetaiappnihonbashi/src/Util/API/Service/shopservice.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Ditailtimeline_CardState.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ViewModel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/timeline/component/timelineCardState.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/store_detail_timelineItem_viewmodel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/timeline_Item_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

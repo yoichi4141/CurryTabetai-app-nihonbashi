@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currytabetaiappnihonbashi/src/Util/API/Service/shopservice.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/make_post_viewmodel.dart';
 import 'package:flutter/material.dart';
 
 class StoreDetailViewmodel extends ChangeNotifier {

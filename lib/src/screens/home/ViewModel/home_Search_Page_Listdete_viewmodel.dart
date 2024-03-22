@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 //条件タブのためのクラス
 class ConditionTab with ChangeNotifier {

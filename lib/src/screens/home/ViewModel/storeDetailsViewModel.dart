@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
 //検索ショップ
-class HotpepperStoredetail {
+class Storedetail {
   String id;
   String name; // 店舗名
   String genre; // カリージャンル
@@ -13,7 +13,7 @@ class HotpepperStoredetail {
   double lng; // マップピン用　経度
   String open; //営業時間
 
-  HotpepperStoredetail({
+  Storedetail({
     required this.id,
     required this.name,
     required this.genre,
@@ -24,8 +24,8 @@ class HotpepperStoredetail {
     required this.open,
   });
 
-  factory HotpepperStoredetail.fromJson(Map<String, dynamic> storedetailJson) {
-    return HotpepperStoredetail(
+  factory Storedetail.fromJson(Map<String, dynamic> storedetailJson) {
+    return Storedetail(
       id: storedetailJson['id'] ?? '',
       name: storedetailJson['name'] ?? '',
       genre: (storedetailJson['genre'] as Map<String, dynamic>)['name'] ?? '',
@@ -41,7 +41,7 @@ class HotpepperStoredetail {
 }
 
 class StoreDetailsViewModel with ChangeNotifier {
-  List<HotpepperStoredetail> storedetailinformation = [];
+  List<Storedetail> storedetailinformation = [];
 
   Future<void> fetchData({String? id}) async {
     print('fetchData called');
@@ -60,15 +60,13 @@ class StoreDetailsViewModel with ChangeNotifier {
 
     List<dynamic>? storedetailtData = jsonData['results']['shop'];
     if (storedetailtData != null) {
-      List<HotpepperStoredetail> newstoredetailtData =
-          storedetailtData.map((shopData) {
+      List<Storedetail> newstoredetailtData = storedetailtData.map((shopData) {
         // SearchShopオブジェクトの作成
-        HotpepperStoredetail shopdetailt =
-            HotpepperStoredetail.fromJson(shopData);
+        Storedetail shopdetailt = Storedetail.fromJson(shopData);
 
         // id情報をプリント
 
-        return HotpepperStoredetail.fromJson(shopData);
+        return Storedetail.fromJson(shopData);
       }).toList();
 
       storedetailinformation = newstoredetailtData;

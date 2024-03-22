@@ -1,4 +1,3 @@
-import 'package:currytabetaiappnihonbashi/src/Util/API/Service/shopservice.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/curry_Map_Autocomplete_View.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_Home_View.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_NearshopAPI_viewmodel.dart';
@@ -22,7 +21,6 @@ class Currysearchmap extends StatefulWidget {
 class CurrysearchmapState extends State<Currysearchmap> {
   late GoogleMapController _mapController;
   late MapViewModel mapViewModel; // postViewModelをプロパティとして追加provider関連
-  bool _isSelected = false; //トグルボタンの初期選択状態
   List<String> nearShopList = []; // 近くの店舗リスト（テキストフィールド用）
   bool isSelected = true;
   late int likeCount = 0; // いいねの数を格納する変数
@@ -53,7 +51,6 @@ class CurrysearchmapState extends State<Currysearchmap> {
           permission == LocationPermission.always) {
         Position position = await Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high); //取得ロケーションの精度
-        print('Got position: ${position.latitude}, ${position.longitude}');
 
         return CameraPosition(
           target: LatLng(position.latitude, position.longitude),
@@ -61,7 +58,7 @@ class CurrysearchmapState extends State<Currysearchmap> {
         );
       } else {
         // 位置情報が許可されていない場合はてきとうにVashonの位置を返す
-        return CameraPosition(
+        return const CameraPosition(
           target: LatLng(35.68184103085021, 139.77912009529513),
           zoom: 15,
         );
@@ -69,14 +66,14 @@ class CurrysearchmapState extends State<Currysearchmap> {
     } catch (e) {
       // エラーが発生した場合は位置情報が許可されていない場合はてきとうにVashonの位置を返す
       print(e.toString());
-      return CameraPosition(
+      return const CameraPosition(
         target: LatLng(35.68184103085021, 139.77912009529513),
         zoom: 15,
       );
     }
   }
 
-//MapViewModelのインスタンスを取得している（これないとカードが描写されない）//TODOリバーポットにする？
+//MapViewModelのインスタンスを取得している（これないとカードが描写されない）
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -105,24 +102,24 @@ class CurrysearchmapState extends State<Currysearchmap> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AutocompleteExample(),
+                        builder: (context) => const AutocompleteExample(),
                       ),
                     );
                   },
                   child: Container(
                     height: 56.0, // GestureDetectorの高さを設定
-                    padding: EdgeInsets.symmetric(vertical: 6.0),
+                    padding: const EdgeInsets.symmetric(vertical: 6.0),
                     decoration: BoxDecoration(
                       border: Border.all(
                           color: const Color.fromARGB(255, 220, 220, 220)),
                       borderRadius: BorderRadius.circular(12.0),
                       color: Colors.white, // 背景色を白に設定
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
+                          padding: EdgeInsets.only(left: 16.0),
                           child: Icon(Icons.search,
                               color: Color.fromARGB(255, 0, 0, 0)),
                         ),
@@ -161,7 +158,7 @@ class CurrysearchmapState extends State<Currysearchmap> {
         future: _initialCameraPositionFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
@@ -263,7 +260,7 @@ class CurrysearchmapState extends State<Currysearchmap> {
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Row(
                         children: [
                           Image.network(
@@ -272,7 +269,7 @@ class CurrysearchmapState extends State<Currysearchmap> {
                             height: 100, // 画像の高さを調整
                             fit: BoxFit.cover,
                           ),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -297,19 +294,19 @@ class CurrysearchmapState extends State<Currysearchmap> {
                               //     ),
                               //   ],
                               // ),
-                              SizedBox(width: 12),
+                              const SizedBox(width: 12),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(height: 4),
-                                  Text('カリージャンル',
+                                  const SizedBox(height: 4),
+                                  const Text('カリージャンル',
                                       style: TextStyle(fontSize: 9)),
-                                  SizedBox(height: 0),
+                                  const SizedBox(height: 0),
                                   Text(
                                     '${nearShop.genre}',
-                                    style: TextStyle(fontSize: 10),
+                                    style: const TextStyle(fontSize: 10),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 6,
                                   ),
                                   Container(
@@ -319,7 +316,6 @@ class CurrysearchmapState extends State<Currysearchmap> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        SizedBox(width: 0),
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -350,7 +346,7 @@ class CurrysearchmapState extends State<Currysearchmap> {
                                                         : Colors.black)),
                                           ],
                                         ),
-                                        SizedBox(width: 8),
+                                        const SizedBox(width: 8),
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,

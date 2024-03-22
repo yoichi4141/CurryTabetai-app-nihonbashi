@@ -61,5 +61,20 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app requires to add file to your photo library your microphone</string>
 	<!-- ここまで -->
+	<!-- Googleログイン用の追加 -->
+<key>CFBundleURLTypes</key>
+<array>
+    <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLName</key>
+        <string></string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>com.googleusercontent.apps.1050296589192-l4eut36nefnmdvors3sl5tn02gjte9fo</string>
+        </array>
+    </dict>
+</array>
+	<!-- ここまで -->
 </dict>
 </plist>

@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:currytabetaiappnihonbashi/src/screens/post/view/signd_Post_View.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/profile/View/guestView.dart';
 import 'package:firebase_auth/firebase_auth.dart';

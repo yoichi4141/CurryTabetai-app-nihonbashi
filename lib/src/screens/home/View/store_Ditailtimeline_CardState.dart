@@ -1,9 +1,6 @@
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ViewModel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/make_post_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/store_detail_timelineItem_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/timeline_Item_viewmodel.dart';
-import 'package:provider/provider.dart';
 
 class StoreDitailTimelineCard extends StatefulWidget {
   final StoreDetailTimelineItem item; //TimelineItem オブジェクトを受け取る

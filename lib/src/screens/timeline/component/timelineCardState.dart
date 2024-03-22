@@ -1,5 +1,4 @@
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_Home_View.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_timeline_view.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/timeline_ViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/timeline_Item_viewmodel.dart';

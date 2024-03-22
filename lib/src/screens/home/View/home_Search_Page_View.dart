@@ -4,9 +4,7 @@ import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_Hom
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_LocationAPI_ViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/home_Search_Page_Listdete_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map%20SearchshopAPI_viewmodel.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class HomeCurrySearchView extends StatefulWidget {
   const HomeCurrySearchView({Key? key}) : super(key: key);

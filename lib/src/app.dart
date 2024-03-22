@@ -1,22 +1,18 @@
-import 'package:currytabetaiappnihonbashi/src/Util/API/Service/shopservice.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ShopPage_Google_Viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/home_Search_Page_Listdete_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_NearshopAPI_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_Placeresult_ViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Detail_ViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/store_Details_HotpepperViewModel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/post/view/signd_Post_View.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/make_post_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/postviewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/profile/ViewModel/profileViewModel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/signup_login/ViewModel/login_viewmodel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/signup_login/ViewModel/makeprofile_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/signup_login/ViewModel/signup_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/store_detail_timelineItem_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/timeline_Item_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/timeline/viewModel/timeline_ViewModel.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator_platform_interface/src/enums/location_permission.dart';
 import 'package:provider/provider.dart';
 import 'screens/home/View/home.dart';
 import 'screens/home/ViewModel/curry_Map_LocationAPI_ViewModel.dart';
@@ -62,8 +58,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
             create: (_) => StoreDitailTimelineItemViewModel()),
         ChangeNotifierProvider(create: (_) => TimeLineViewModel()),
-
-
+        ChangeNotifierProvider(create: (_) => LoginWithGooglViewModel()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -86,14 +81,13 @@ class MyStatefulWidget extends StatefulWidget {
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
 
-
   static const List<Widget> _screens = [
-      HomeScreen(),
+    HomeScreen(),
     TimelineScreen(),
     PostScreen(),
     ProfileScreen()
   ];
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
