@@ -99,7 +99,7 @@ class ProfileViewModel with ChangeNotifier {
       print('画像が選択されました');
       print('選択した画像のpath$imagePath]');
     } else {
-      profileImageUrl = 'assets/images/india19-37359.jpg'; // デフォルトのイメージのパスをセット
+      profileImageUrl = AssetImage('assets/images/india19-37359.jpg').assetName;
       print('画像が選択されませんでした');
     }
   }

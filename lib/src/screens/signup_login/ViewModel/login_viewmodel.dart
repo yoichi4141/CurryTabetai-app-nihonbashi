@@ -132,3 +132,7 @@ class LoginWithGooglViewModel extends ChangeNotifier {
     }
   }
 }
+
+//アップルログインViewmodel
+
+

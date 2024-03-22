@@ -64,6 +64,9 @@ class _MyAppState extends State<MyApp> {
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          inputDecorationTheme: InputDecorationTheme(
+            hintStyle: TextStyle(color: Colors.grey), // ヒントテキストのスタイルを設定
+          ),
         ),
         home: const MyStatefulWidget(),
       ),
