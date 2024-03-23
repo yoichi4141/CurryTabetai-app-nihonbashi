@@ -82,7 +82,10 @@ class GoogleButton extends StatelessWidget {
 
     return ElevatedButton(
       onPressed: () {
-        loginWithGooglViewModel.loginInWithGoogle(context);
+        final loginViewModel =
+            Provider.of<LoginViewModel>(context, listen: false);
+        loginWithGooglViewModel.loginInWithGoogle(
+            context, loginViewModel.email, loginViewModel.password);
       },
       style: ElevatedButton.styleFrom(
         primary: Colors.orangeAccent,

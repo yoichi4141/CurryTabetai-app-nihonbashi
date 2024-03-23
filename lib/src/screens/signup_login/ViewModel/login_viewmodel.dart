@@ -45,16 +45,19 @@ class LoginViewModel extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
 
-// Firebaseログインのメソッド
-      final UserCredential userCredential =
-          await _auth.signInWithEmailAndPassword(
+// Firebaseログインのメソッドcredential
+      final credential = EmailAuthProvider.credential(
         email: email,
         password: password,
       );
+      final UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
 
       isLoading = false;
       errorMessage = '';
       print('ログイン成功： ${userCredential.user!.uid}');
+
+      // メール認証が成功した後、GoogleAuthProviderを使用して追加の認証情報をリンクする
 
       // Navigator.of(context).pop(); // 前の画面へ遷移
       Navigator.popUntil(context, (route) => route.isFirst);
@@ -100,7 +103,8 @@ class LoginWithGooglViewModel extends ChangeNotifier {
   }
 
   // Googleアカウントでログイン
-  Future<void> loginInWithGoogle(BuildContext context) async {
+  Future<void> loginInWithGoogle(
+      BuildContext context, String email, String password) async {
     try {
       _setLoading(true);
       _setErrorMessage('');
@@ -112,7 +116,7 @@ class LoginWithGooglViewModel extends ChangeNotifier {
       if (googleSignInAccount != null) {
         final GoogleSignInAuthentication googleSignInAuthentication =
             await googleSignInAccount.authentication;
-        final AuthCredential credential = GoogleAuthProvider.credential(
+        final credential = GoogleAuthProvider.credential(
           idToken: googleSignInAuthentication.idToken,
           accessToken: googleSignInAuthentication.accessToken,
         );
@@ -120,7 +124,13 @@ class LoginWithGooglViewModel extends ChangeNotifier {
         final UserCredential authResult =
             await FirebaseAuth.instance.signInWithCredential(credential);
         _setUser(authResult.user);
-        // Navigator.of(context).pop(); // 前の画面へ遷移
+
+//追加の認証情報をリンクする
+//Eメール
+        final emailCredential =
+            EmailAuthProvider.credential(email: email, password: password);
+        await authResult.user?.linkWithCredential(emailCredential);
+
         Navigator.popUntil(context, (route) => route.isFirst);
       } else {
         _setErrorMessage('Googleサインインがキャンセルされました');
@@ -132,7 +142,3 @@ class LoginWithGooglViewModel extends ChangeNotifier {
     }
   }
 }
-
-//アップルログインViewmodel
-
-

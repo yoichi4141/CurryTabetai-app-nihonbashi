@@ -21,13 +21,11 @@ class ProfileViewModel with ChangeNotifier {
   }
 
   Future<void> fetchUserData() async {
-    // ここでユーザーIDを指定する必要があります
-
-    final String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
-
-    final snapshot =
+    // ここでユーザーIDを指定するAuthのuid
+    final String? userId = _auth.currentUser?.uid;
+    final DocumentSnapshot snapshot =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
-    final userData = snapshot.data();
+    final userData = snapshot.data() as Map<String, dynamic>;
     if (userData != null) {
       userModel = UserModel(
         userId: snapshot.id,
