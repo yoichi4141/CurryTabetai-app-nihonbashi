@@ -35,7 +35,6 @@ class _MakeprofileState extends State<Makeprofile> {
   void initState() {
     super.initState();
     viewmodel = ProfileViewModel();
-    User? user = FirebaseAuth.instance.currentUser;
     userId = widget.userId;
     //各テキストフィールドの初期値をファイアーベースから取得している
     FirebaseFirestore.instance
@@ -124,20 +123,15 @@ class _MakeprofileState extends State<Makeprofile> {
                         )),
                     const SizedBox(height: 40),
                     TextFormField(
+                      //ファイアーベースの値が格納されたテキストコントローラーを使用する
                       controller: displayNameController,
                       decoration: InputDecoration(
                         labelText: "ニックネーム:例 カリーボーイ",
                         hintText: displayName ?? 'カリーボーイ',
                         labelStyle: TextStyle(fontSize: 12),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return '入力してください'; // エラーメッセージ
-                        }
-                        return null; // 有効な入力
-                      },
                       onChanged: (String value) {
-                        viewmodel.updateDisplayName(value);
+                        viewmodel.updateDisplayName(displayNameController.text);
                       },
                     ),
                     const SizedBox(height: 8),
