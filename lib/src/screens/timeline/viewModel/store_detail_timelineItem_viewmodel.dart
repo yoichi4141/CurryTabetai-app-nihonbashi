@@ -29,7 +29,7 @@ class StoreDitailTimelineItemViewModel with ChangeNotifier {
     print('指定されたユーザーID: $userId'); // shopIdの値を出力する
 
     return _firestore
-        .collection('posts')
+        .collection('timeline')
         .where('shopId', isEqualTo: shopId) // 指定されたショップIDに関連する投稿のみを取得
         .orderBy('createdAt', descending: true)
         .snapshots()

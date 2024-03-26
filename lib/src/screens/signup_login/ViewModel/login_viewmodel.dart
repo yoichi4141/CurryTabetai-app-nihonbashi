@@ -130,8 +130,6 @@ class LoginWithGooglViewModel extends ChangeNotifier {
         final emailCredential =
             EmailAuthProvider.credential(email: email, password: password);
         await authResult.user?.linkWithCredential(emailCredential);
-
-        Navigator.popUntil(context, (route) => route.isFirst);
       } else {
         _setErrorMessage('Googleサインインがキャンセルされました');
       }
@@ -139,6 +137,7 @@ class LoginWithGooglViewModel extends ChangeNotifier {
       _setErrorMessage('Googleサインインに失敗しました: ${e.toString()}');
     } finally {
       _setLoading(false);
+      Navigator.popUntil(context, (route) => route.isFirst);
     }
   }
 }

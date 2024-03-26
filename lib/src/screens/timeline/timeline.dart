@@ -23,7 +23,6 @@ class TimelineScreen extends StatelessWidget {
         title: const Text('みんなのカリーログ'),
       ),
       body: StreamBuilder<List<TimelineItem>>(
-        //TODOここでshopId使うどこかの
         stream: timelineitemviewModel.getTimelineItems(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
