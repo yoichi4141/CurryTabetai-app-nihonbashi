@@ -1,14 +1,8 @@
-import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_Home_View.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_timeline_view.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/make_post_viewmodel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/timeline/timeline.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class MakePostView extends StatefulWidget {

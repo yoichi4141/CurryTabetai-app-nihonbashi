@@ -1,4 +1,5 @@
 import 'package:currytabetaiappnihonbashi/src/screens/signup_login/ViewModel/signup_viewmodel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -77,11 +78,13 @@ class SignupView extends StatelessWidget {
 
 // Googleサインインボタン
 class GoogleButton extends StatelessWidget {
+  final GoogleSignInService _googleSignInService = GoogleSignInService();
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        // ボタンが押されたときの処理
+      onPressed: () async {
+        await _googleSignInService.signinWithGoogle(context);
+        print(FirebaseAuth.instance.currentUser?.displayName);
       },
       style: ElevatedButton.styleFrom(
         primary: Colors.orangeAccent,

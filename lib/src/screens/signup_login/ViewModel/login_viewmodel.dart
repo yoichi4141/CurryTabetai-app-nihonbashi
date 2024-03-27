@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/signup_login/%20View/makeprofile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
+//メルアドのログインViremodel
 class LoginViewModel extends ChangeNotifier {
   String email = '';
   String password = '';
@@ -45,16 +45,19 @@ class LoginViewModel extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
 
-// Firebaseログインのメソッド
-      final UserCredential userCredential =
-          await _auth.signInWithEmailAndPassword(
+// Firebaseログインのメソッドcredential
+      final credential = EmailAuthProvider.credential(
         email: email,
         password: password,
       );
+      final UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
 
       isLoading = false;
       errorMessage = '';
       print('ログイン成功： ${userCredential.user!.uid}');
+
+      // メール認証が成功した後、GoogleAuthProviderを使用して追加の認証情報をリンクする
 
       // Navigator.of(context).pop(); // 前の画面へ遷移
       Navigator.popUntil(context, (route) => route.isFirst);
@@ -67,6 +70,74 @@ class LoginViewModel extends ChangeNotifier {
       notifyListeners();
 
       // 登録成功後の遷移処理
+    }
+  }
+}
+
+//GoogleのログインViewmodel
+class LoginWithGooglViewModel extends ChangeNotifier {
+  bool _isLoading = false;
+  String _errorMessage = '';
+  User? _user;
+
+  bool get isLoading => _isLoading;
+  String get errorMessage => _errorMessage;
+  User? get user => _user;
+
+  //ローディング状態の更新
+  void _setLoading(bool loading) {
+    _isLoading = loading;
+    notifyListeners();
+  }
+
+  // エラーメッセージの更新
+  void _setErrorMessage(String message) {
+    _errorMessage = message;
+    notifyListeners();
+  }
+
+  // ユーザー情報の更新
+  void _setUser(User? user) {
+    _user = user;
+    notifyListeners();
+  }
+
+  // Googleアカウントでログイン
+  Future<void> loginInWithGoogle(
+      BuildContext context, String email, String password) async {
+    try {
+      _setLoading(true);
+      _setErrorMessage('');
+
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
+
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+        final credential = GoogleAuthProvider.credential(
+          idToken: googleSignInAuthentication.idToken,
+          accessToken: googleSignInAuthentication.accessToken,
+        );
+
+        final UserCredential authResult =
+            await FirebaseAuth.instance.signInWithCredential(credential);
+        _setUser(authResult.user);
+
+//追加の認証情報をリンクする
+//Eメール
+        final emailCredential =
+            EmailAuthProvider.credential(email: email, password: password);
+        await authResult.user?.linkWithCredential(emailCredential);
+      } else {
+        _setErrorMessage('Googleサインインがキャンセルされました');
+      }
+    } catch (e) {
+      _setErrorMessage('Googleサインインに失敗しました: ${e.toString()}');
+    } finally {
+      _setLoading(false);
+      Navigator.popUntil(context, (route) => route.isFirst);
     }
   }
 }

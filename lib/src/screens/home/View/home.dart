@@ -1,4 +1,3 @@
-import 'package:currytabetaiappnihonbashi/src/Util/API/Service/shopservice.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/curryTypeSearchListView.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/curry_Map_Search_View.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/home_Search_Page_View.dart';
@@ -7,7 +6,7 @@ import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/homeViewMod
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
-import 'package:permission_handler/permission_handler.dart'; //権限管理系のパッケージ今回は位置情報
+//権限管理系のパッケージ今回は位置情報
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({

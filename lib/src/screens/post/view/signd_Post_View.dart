@@ -1,5 +1,3 @@
-import 'package:currytabetaiappnihonbashi/src/app.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/View/home.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/post/view/make_post_View.dart';
 
 import 'package:currytabetaiappnihonbashi/src/screens/post/viewmodel/postviewmodel.dart';

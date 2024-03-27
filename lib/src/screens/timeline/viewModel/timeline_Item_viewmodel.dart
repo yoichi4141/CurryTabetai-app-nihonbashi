@@ -28,50 +28,29 @@ class TimelineItemViewModel with ChangeNotifier {
 
   Stream<List<TimelineItem>> getTimelineItems() {
     return _firestore
-        .collection('posts')
-        .orderBy('createdAt', descending: true)
+        .collection('timeline') // コレクションのパスを 'posts' から 'timeline' に変更
         .snapshots()
-        .asyncMap((snapshot) async {
-      List<TimelineItem> timelineItems = [];
+        .map((querySnapshot) {
+      return querySnapshot.docs.map((document) {
+        Map<String, dynamic> postData = document.data() as Map<String, dynamic>;
+        String userId = postData['userId'] ?? '';
+        String userName = postData['userName'] ?? '匿名ユーザー';
+        String profileImage = postData['profileImage'] ?? '';
+        String postText = postData['postText'] ?? '';
+        String postImage = postData['postImage'] ?? '';
+        String shopName = postData['shopName'] ?? '';
+        String shopId = postData['shopId'] ?? '';
 
-      for (var doc in snapshot.docs) {
-        // 投稿のデータを取得
-        Map<String, dynamic>? postData = doc.data();
-
-        if (postData != null) {
-          String userId = postData['userId'];
-
-          // ユーザーのドキュメントを取得
-          DocumentSnapshot userDoc =
-              await _firestore.collection('users').doc(userId).get();
-          if (userDoc.exists) {
-            Map<String, dynamic>? userData =
-                userDoc.data() as Map<String, dynamic>?;
-            if (userData != null) {
-              String userName = userData['displayName'] ?? '匿名ユーザー';
-              String profileImage = userData['profileImage'] ?? '';
-              String postText = postData['postText'] ?? '';
-              String postImage = postData['postImage'] ?? '';
-              String shopName = postData['shopName'] ?? '';
-              String shopId = postData['shopId'];
-
-              // TimelineItemに追加
-              timelineItems.add(TimelineItem(
-                userId: userId,
-                //TODOここのshopId
-                shopId: shopId,
-                postText: postText,
-                userName: userName,
-                postImage: postImage,
-                profileImage: profileImage,
-                shopName: shopName,
-              ));
-            }
-          }
-        }
-      }
-
-      return timelineItems;
+        return TimelineItem(
+          userId: userId,
+          shopId: shopId,
+          postText: postText,
+          userName: userName,
+          postImage: postImage,
+          profileImage: profileImage,
+          shopName: shopName,
+        );
+      }).toList();
     });
   }
 }

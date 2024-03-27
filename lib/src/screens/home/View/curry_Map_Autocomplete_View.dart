@@ -1,7 +1,6 @@
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/curry_Map_Searchlocation.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_Home_View.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_LocationAPI_ViewModel.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_NearshopAPI_viewmodel.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map%20SearchshopAPI_viewmodel.dart';
 import 'package:flutter/material.dart';
 
@@ -37,9 +36,9 @@ class _AutocompleteExampleState extends State<AutocompleteExample> {
     // _initData();
     return Scaffold(
       appBar: AppBar(
-        title: Text('アルティメットカリーロケーションサーチ🍛🔍',
+        title: const Text('アルティメットカリーロケーションサーチ🍛🔍',
             style: TextStyle(color: Colors.black)),
-        titleTextStyle: TextStyle(fontSize: 14),
+        titleTextStyle: const TextStyle(fontSize: 14),
       ),
       body: Padding(
         padding: const EdgeInsets.all(32.0),
@@ -72,9 +71,8 @@ class _AutocompleteExampleState extends State<AutocompleteExample> {
                       TextFormField(
                         controller: textEditingController,
                         onChanged: (String text) async {
-                          print('ロケーションテキストになる: $text'); // 入力されたテキストをプリント
-
-                          await Future.delayed(Duration(milliseconds: 500));
+                          await Future.delayed(
+                              const Duration(milliseconds: 500));
 
                           searchViewModel.hotpepperSearch(
                               userEnteredText: text);
@@ -84,7 +82,7 @@ class _AutocompleteExampleState extends State<AutocompleteExample> {
                           onFieldSubmitted();
                           textEditingController.clear();
                         },
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.only(
                               top: 4.0,
@@ -97,7 +95,7 @@ class _AutocompleteExampleState extends State<AutocompleteExample> {
                               TextStyle(color: Colors.black.withOpacity(0.5)),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.0),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: Color.fromARGB(255, 18, 3, 3)),
                           ),
                           focusedBorder: OutlineInputBorder(
@@ -134,51 +132,49 @@ class _AutocompleteExampleState extends State<AutocompleteExample> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       const Text(''),
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              String searchText = textEditingController.text;
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            String searchText = textEditingController.text;
 
-                              print('ロケーションテキスト: $searchText');
-                              await locationViewModel.loadLocationData(
-                                placeName: searchText,
-                              );
+                            await locationViewModel.loadLocationData(
+                              placeName: searchText,
+                            );
 
-                              double destinationLat =
-                                  locationViewModel.locationList.isNotEmpty
-                                      ? locationViewModel.locationList[0]
-                                      : 0.0;
+                            double destinationLat =
+                                locationViewModel.locationList.isNotEmpty
+                                    ? locationViewModel.locationList[0]
+                                    : 0.0;
 
-                              double destinationLng =
-                                  locationViewModel.locationList.isNotEmpty
-                                      ? locationViewModel.locationList[1]
-                                      : 0.0;
+                            double destinationLng =
+                                locationViewModel.locationList.isNotEmpty
+                                    ? locationViewModel.locationList[1]
+                                    : 0.0;
 
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SearchLocationMap(
-                                    destinationLat: destinationLat,
-                                    destinationLng: destinationLng,
-                                  ),
+                            // ignore: use_build_context_synchronously
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SearchLocationMap(
+                                  destinationLat: destinationLat,
+                                  destinationLng: destinationLng,
                                 ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.green,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                minimumSize: Size(300, 40)),
-                            child: Text(
-                              '検索',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.bold,
                               ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              minimumSize: const Size(300, 40)),
+                          child: const Text(
+                            '検索',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),

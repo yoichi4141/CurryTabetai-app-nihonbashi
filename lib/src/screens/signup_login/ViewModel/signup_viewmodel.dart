@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/signup_login/%20View/makeprofile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SignUpViewModel extends ChangeNotifier {
   String userId = '';
@@ -100,6 +100,60 @@ class SignUpViewModel extends ChangeNotifier {
       notifyListeners();
 
       // 登録成功後の遷移処理
+    }
+  }
+}
+
+class GoogleSignInService {
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  CollectionReference posts = FirebaseFirestore.instance.collection('posts');
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  Future<void> signinWithGoogle(BuildContext context) async {
+    try {
+      final googleUser =
+          await _googleSignIn.signIn(); // scopes: ['profile', 'email'] は不要
+
+      final googleAuth = await googleUser?.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      if (FirebaseAuth.instance.currentUser != null) {
+        await GoogleCreateUserProfile(FirebaseAuth.instance.currentUser!);
+
+        // Navigator.of(context).pop(); // 前の画面へ遷移
+        Navigator.popUntil(context, (route) => route.isFirst);
+      } else {
+        print('ユーザーがログインしていません。');
+      }
+    } catch (e) {
+      print('Googleサインインエラー:$e');
+    }
+  }
+
+  Future<void> GoogleCreateUserProfile(User user) async {
+    try {
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('users');
+      await users.doc(user.uid).set({
+        'displayName': user.displayName,
+        'profileImage': user.photoURL,
+        // 他のユーザープロファイル情報のセットアップ
+      });
+      await posts.doc(user.uid).set({
+//初回登録用なのでもっと適当なのでいいかも
+        'postText': null,
+        'userName': null,
+        'postImage': null,
+        'profileImage': null,
+      });
+
+      print('User profile created successfully.');
+    } catch (e) {
+      print('Failed to create user profile: $e');
     }
   }
 }

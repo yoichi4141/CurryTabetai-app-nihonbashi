@@ -3,7 +3,6 @@ import 'package:currytabetaiappnihonbashi/src/screens/profile/ViewModel/profileV
 import 'package:currytabetaiappnihonbashi/src/screens/signup_login/%20View/makeprofile_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 //ログイン後のプロフィール画面です
 class SignedProfileView extends StatefulWidget {
@@ -23,9 +22,14 @@ class _SignedProfileViewState extends State<SignedProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('users').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .snapshots(),
+        builder: (BuildContext context,
+            AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
           }
@@ -33,15 +37,12 @@ class _SignedProfileViewState extends State<SignedProfileView> {
             return Text('Error:$snapshot.error}');
           }
 
-          //Firestoreからデータを取得してリストに変換
-          List<DocumentSnapshot> users = snapshot.data!.docs;
-          //ユーザーリストが空でないことを確認
-          if (users.isEmpty) {
+          //Documentsnapshotからデータを取得するのでdata()
+          Map<String, dynamic>? userData = snapshot.data?.data();
+
+          if (userData == null) {
             return Text('No user found');
           }
-          Map<String, dynamic> userData =
-              users[0].data() as Map<String, dynamic>;
-
           return Padding(
             padding: const EdgeInsets.all(32.0),
             child: SingleChildScrollView(
@@ -146,8 +147,8 @@ class _SignedProfileViewState extends State<SignedProfileView> {
                   ),
                   const SizedBox(height: 8),
                   ElevatedButton(
-                    onPressed: () {
-                      FirebaseAuth.instance.signOut();
+                    onPressed: () async {
+                      await FirebaseAuth.instance.signOut();
                     },
                     child: const Text('ログアウト'),
                   )

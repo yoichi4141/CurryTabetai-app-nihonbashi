@@ -2,8 +2,6 @@ import 'package:currytabetaiappnihonbashi/src/screens/home/View/curry_Map_Autoco
 import 'package:currytabetaiappnihonbashi/src/screens/home/View/store_Detail_Home_View.dart';
 import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_Placeresult_ViewModel.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-//Googleマップを表示させますよ〜
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -94,24 +92,24 @@ class SearchLocationMapState extends State<SearchLocationMap> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AutocompleteExample(),
+                        builder: (context) => const AutocompleteExample(),
                       ),
                     );
                   },
                   child: Container(
                     height: 56.0, // GestureDetectorの高さを設定
-                    padding: EdgeInsets.symmetric(vertical: 6.0),
+                    padding: const EdgeInsets.symmetric(vertical: 6.0),
                     decoration: BoxDecoration(
                       border: Border.all(
                           color: const Color.fromARGB(255, 220, 220, 220)),
                       borderRadius: BorderRadius.circular(12.0),
                       color: Colors.white, // 背景色を白に設定
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
+                          padding: EdgeInsets.only(left: 16.0),
                           child: Icon(Icons.search,
                               color: Color.fromARGB(255, 0, 0, 0)),
                         ),
@@ -150,7 +148,7 @@ class SearchLocationMapState extends State<SearchLocationMap> {
       future: _initialCameraPositionFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {
@@ -165,12 +163,12 @@ class SearchLocationMapState extends State<SearchLocationMap> {
             markers: {
               // 現在地のマーカーはすでにカリーサーチマップで使用しているのでのちほど両方画像に変える
               Marker(
-                markerId: MarkerId('userLocation'),
+                markerId: const MarkerId('userLocation'),
                 position: LatLng(initialCameraPosition.target.latitude,
                     initialCameraPosition.target.longitude),
                 icon: BitmapDescriptor.defaultMarkerWithHue(
                     BitmapDescriptor.hueBlue),
-                infoWindow: InfoWindow(title: 'Your Location'),
+                infoWindow: const InfoWindow(title: 'Your Location'),
               ),
               // 近くの店舗のマーカーを追加
               ...placeResultViewModel.nearbyPlaces.map((selectedShop) {
@@ -264,7 +262,7 @@ class SearchLocationMapState extends State<SearchLocationMap> {
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Row(
                         children: [
                           Image.network(
@@ -273,23 +271,23 @@ class SearchLocationMapState extends State<SearchLocationMap> {
                             height: 100, // 画像の高さを調整
                             fit: BoxFit.cover,
                           ),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
+                              const Row(
                                 children: [
-                                  const Text(
+                                  Text(
                                     '投稿数 100',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 10,
                                       fontWeight: FontWeight.normal,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  const SizedBox(width: 8), // スペース
+                                  SizedBox(width: 8), // スペース
 
-                                  const Text(
+                                  Text(
                                     'いいね 100',
                                     style: TextStyle(
                                       fontSize: 10,
@@ -298,19 +296,19 @@ class SearchLocationMapState extends State<SearchLocationMap> {
                                   ),
                                 ],
                               ),
-                              SizedBox(width: 12),
+                              const SizedBox(width: 12),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(height: 4),
-                                  Text('カリージャンル',
+                                  const SizedBox(height: 4),
+                                  const Text('カリージャンル',
                                       style: TextStyle(fontSize: 9)),
-                                  SizedBox(height: 0),
+                                  const SizedBox(height: 0),
                                   Text(
                                     '${nearShop.genre}',
-                                    style: TextStyle(fontSize: 10),
+                                    style: const TextStyle(fontSize: 10),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 6,
                                   ),
                                   Container(
@@ -320,7 +318,7 @@ class SearchLocationMapState extends State<SearchLocationMap> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        SizedBox(width: 0),
+                                        const SizedBox(width: 0),
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -351,7 +349,7 @@ class SearchLocationMapState extends State<SearchLocationMap> {
                                                         : Colors.black)),
                                           ],
                                         ),
-                                        SizedBox(width: 8),
+                                        const SizedBox(width: 8),
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,

@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:currytabetaiappnihonbashi/src/Util/API/Service/shopservice.dart';
-import 'package:currytabetaiappnihonbashi/src/screens/home/ViewModel/curry_Map_NearshopAPI_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
