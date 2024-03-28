@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class SignUpViewModel extends ChangeNotifier {
   String userId = '';
@@ -149,6 +152,54 @@ class GoogleSignInService {
         'userName': null,
         'postImage': null,
         'profileImage': null,
+      });
+
+      print('User profile created successfully.');
+    } catch (e) {
+      print('Failed to create user profile: $e');
+    }
+  }
+}
+
+class AppSignInService {
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  CollectionReference posts = FirebaseFirestore.instance.collection('posts');
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> signinWithApple(BuildContext context) async {
+    try {
+      final appleCredental = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+      //認証情報からFirevase Authno Credentalを作成
+      final oauthCredential = OAuthProvider("apple.com").credential(
+        idToken: appleCredental.identityToken,
+        accessToken: appleCredental.authorizationCode,
+      );
+
+      // Firebaseでサインイン
+      await _auth.signInWithCredential(oauthCredential);
+      if (_auth.currentUser != null) {
+        await createAppleUserProfile(_auth.currentUser!);
+
+        // Navigator.of(context).pop(); // 前の画面へ遷移
+        Navigator.popUntil(context, (route) => route.isFirst);
+      } else {
+        print('ユーザーがログインしていません。');
+      }
+    } catch (e) {
+      print('Appleサインインエラー:$e');
+    }
+  }
+
+  Future<void> createAppleUserProfile(User user) async {
+    try {
+      await users.doc(user.uid).set({
+        'displayName': user.displayName ?? 'AppleDefaultUser',
+        'profileImage': user.photoURL ?? '',
       });
 
       print('User profile created successfully.');

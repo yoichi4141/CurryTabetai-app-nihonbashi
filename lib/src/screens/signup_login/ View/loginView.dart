@@ -111,9 +111,13 @@ class GoogleButton extends StatelessWidget {
 class AppleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final loginWithAppleViewModel =
+        Provider.of<LoginWithAppleViewModel>(context);
     return ElevatedButton(
       onPressed: () {
-        // ボタンが押されたときの処理
+        loginWithAppleViewModel.loginWithinApple(
+          context,
+        );
       },
       style: ElevatedButton.styleFrom(
         primary: Colors.orangeAccent,
