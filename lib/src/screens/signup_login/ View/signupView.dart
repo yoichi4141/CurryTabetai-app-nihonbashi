@@ -108,11 +108,13 @@ class GoogleButton extends StatelessWidget {
 
 // Appleサインインボタン
 class AppleButton extends StatelessWidget {
+  final AppSignInService _appSignInService = AppSignInService();
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        // ボタンが押されたときの処理
+      onPressed: () async {
+        await _appSignInService.signinWithApple(context);
+        print(FirebaseAuth.instance.currentUser?.displayName);
       },
       style: ElevatedButton.styleFrom(
         primary: Colors.orangeAccent,

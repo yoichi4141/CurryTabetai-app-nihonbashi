@@ -59,6 +59,7 @@ class _MyAppState extends State<MyApp> {
             create: (_) => StoreDitailTimelineItemViewModel()),
         ChangeNotifierProvider(create: (_) => TimeLineViewModel()),
         ChangeNotifierProvider(create: (_) => LoginWithGooglViewModel()),
+        ChangeNotifierProvider(create: (_) => LoginWithAppleViewModel()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

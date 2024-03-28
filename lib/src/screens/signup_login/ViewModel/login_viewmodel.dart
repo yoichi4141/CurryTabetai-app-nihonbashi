@@ -1,6 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 //メルアドのログインViremodel
 class LoginViewModel extends ChangeNotifier {
@@ -135,6 +138,63 @@ class LoginWithGooglViewModel extends ChangeNotifier {
       }
     } catch (e) {
       _setErrorMessage('Googleサインインに失敗しました: ${e.toString()}');
+    } finally {
+      _setLoading(false);
+      Navigator.popUntil(context, (route) => route.isFirst);
+    }
+  }
+}
+
+class LoginWithAppleViewModel extends ChangeNotifier {
+  bool _isLoading = false;
+  String _errorMessage = '';
+  User? _user;
+
+  bool get isLoading => _isLoading;
+  String get errorMessage => _errorMessage;
+  User? get user => _user;
+
+  //ローディング状態の更新
+  void _setLoading(bool loading) {
+    _isLoading = loading;
+    notifyListeners();
+  }
+
+  // エラーメッセージの更新
+  void _setErrorMessage(String message) {
+    _errorMessage = message;
+    notifyListeners();
+  }
+
+  // ユーザー情報の更新
+  void _setUser(User? user) {
+    _user = user;
+    notifyListeners();
+  }
+
+  Future<void> loginWithinApple(BuildContext context) async {
+    try {
+      final appleCredental = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      //Appleの認証データをFirebaseの認証データに変換
+      final oauthCredential = OAuthProvider("apple.com").credential(
+        idToken: appleCredental.identityToken,
+        accessToken: appleCredental.authorizationCode,
+      );
+
+      //Firebaseでサインイン
+      final authResult =
+          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+
+      //ユーザー情報の取得
+      final user = authResult.user;
+    } catch (e) {
+      print(e);
     } finally {
       _setLoading(false);
       Navigator.popUntil(context, (route) => route.isFirst);
